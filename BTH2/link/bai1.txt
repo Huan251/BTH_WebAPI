@@ -1,0 +1,28 @@
+Lấy TẤT CẢ http://localhost:3000/api/nhanvien
+Tìm theo tên + SDT: http://localhost:3000/api/nhanvien?tenNV=Hu%C3%A2n&sdt=0912345678
+Tìm theo tên + giới tính + SDT: http://localhost:3000/api/nhanvien?tenNV=Huân&gioiTinh=Nam&sdt=0912345678
+Tìm theo email: http://localhost:3000/api/nhanvien?email=@example.com
+Tìm theo ngày sinh: http://localhost:3000/api/nhanvien?ngaySinh=1990-05-12
+Tìm theo mã nhân viên: http://localhost:3000/api/nhanvien?maNV=NV002 
+
+Thêm mới POST http://localhost:3000/api/nhanvien
+
+Body (JSON): {"maNV": "NV007",
+ "TenNV": "Pham Van F",
+  "GioiTinh": "Nam",
+   "NgaySinh": "1999-01-01",
+    "email": "pvf@example.com",
+     "SDT": "0123456789"
+     }
+
+Cập nhật PUT http://localhost:3000/api/nhanvien
+Body (JSON): {
+  "maNV": "NV111",
+  "TenNV": "Lê Quang Huân",
+  "GioiTinh": "Nam",
+  "NgaySinh": "2005-05-12",
+  "email": "huan@gmail.com",
+  "SDT": "0912345678"
+}
+
+Xóa	DELETE http://localhost:3000/api/nhanvien/NV005

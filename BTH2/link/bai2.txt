@@ -1,0 +1,6 @@
+Lấy TẤT CẢ sách	http://localhost:3000/api/sach
+Lấy sách theo ID http://localhost:3000/api/sach/101N
+Các sách có tên tác giả là TACGIA http://localhost:3000/api/sach/search/tacgia?tacgia=Robert 
+Các sách có tên sách chứa tham số TENSACH http://localhost:3000/api/sach/search/tensach?ten=Potter
+Các sách có tên NXB là NHAXB http://localhost:3000/api/sach/search/nxb?nxb=Nhà xuất bản Thế Giới
+Các sách mới (5 năm tính từ năm hiện tại) http://localhost:3000/api/sach/search/moi

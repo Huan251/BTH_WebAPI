@@ -1,0 +1,3 @@
+Lấy tất cả: http://localhost:3000/api/sinhvien
+Tìm theo Địa chỉ: http://localhost:3000/api/sinhvien/search/diachi?diachi=Hà Nội
+Tìm sinh viên trên 20 tuổi: http://localhost:3000/api/sinhvien/search/tren20
