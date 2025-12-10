@@ -1,4 +1,68 @@
+### Bai 1
+## GET
+# Lấy tất cả sản phẩm : http://localhost:3000/api/sanpham
+# Lấy sản phẩm theo mã : http://localhost:3000/api/sanpham/:Ma
+# Lấy tất cả danh mục : http://localhost:3000/api/danhmuc
+# Lấy tất cả sản phẩm theo mã danh mục : http://localhost:3000/api/danhmuc/:maDanhMuc/sanpham
+# Tìm kiếm theo tên : http://localhost:3000/api/sanpham/timkiem?ten=Ten
+# Phân trang và sắp xếp sản phẩm :  http://localhost:3000/api/sanpham?page=2&size=6&sort=desc
+# Thống kê sản phẩm theo danh mục : http://localhost:3000/api/thongke/sanpham-danhmuc
 
+## POST
+# Thêm sản phẩm http://localhost:3000/api/sanpham
+# {
+#    "Ma": "SP0010",
+#    "Ten": "Điện Thoại ABC",
+#    "DonGia": 12500000,
+#    "MaDanhMuc": 101 
+# }
+
+## PUT
+# Sửa sản phẩm http://localhost:3000/api/sanpham/:Ma
+# {
+#    "Ten": "Điện Thoại LQH",
+#    "DonGia": 333333,
+#    "MaDanhMuc": 101 
+# }
+
+## DELETE
+# Xóa sản phẩm http://localhost:3000/api/sanpham/:Ma
+
+### Bai2
+## GET
+# In ra tất cả nhân viên http://localhost:3000/api/nhanvien
+# In nhân viên theo mã http://localhost:3000/api/nhanvien/101
+# Lấy danh sách phòng ban http://localhost:3000/api/phongban
+# Lấy nhân viên theo phòng ban http://localhost:3000/api/phongban/2/nhanvien
+# Lấy danh sách công trình http://localhost:3000/api/congtrinh
+# Thống kê số ngày công của nhân viên http://localhost:3000/api/thongke/nhanvien/101/ngaycong
+## POST
+#  http://localhost:3000/api/nhanvien
+#  {
+#    "MANV": 121,
+#    "HOTEN": "Nguyen Van X",
+#    "NGAYSINH": "1990-01-01",
+#    "PHAI": "Nam",
+#    "DIACHI": "Hà Nội",
+#    "MAPB": 2
+#  }
+# Phân công nhân viên tham gia công trình http://localhost:3000/api/cong
+#  {
+#      "MACT": 201,
+#      "MANV": 101,
+#      "SLNGAYCONG": 20
+#  }
+
+## PUT
+# http://localhost:3000/api/nhanvien/120
+# {
+#    "HOTEN": "Le Quang Huan",
+#    "DIACHI": "Hà Nội",
+#    "MAPB": 3
+#  }
+
+## DELETE
+# http://localhost:3000/api/nhanvien/121
 
 ## ⛩ **NodeJS Starter**
 
