@@ -17,11 +17,15 @@ router.get("/danhmuc/:ma_danh_muc", danhMucController.layDanhMucTheoMa);
 
 router.post("/danhmuc", danhMucController.themDanhMuc);
 
+router.put("/danhmuc/:ma_danh_muc", danhMucController.suaDanhMuc);
+
 // =============================== Nhà Cung Cấp ===============================
 router.get("/nhacungcap", nhaCungCapController.layTatCaNhaCungCap);
 router.get("/nhacungcap/:ma_ncc", nhaCungCapController.layNCCTheoMa);
 
 router.post("/nhacungcap", nhaCungCapController.themNhaCungCap);
+
+router.put("/nhacungcap/:ma_ncc", nhaCungCapController.suaNhaCungCap);
 
 // =============================== Sản Phẩm ===============================
 router.get("/sanpham", sanPhamController.layTatCaSanPham);
@@ -32,6 +36,8 @@ router.get("/sanpham/kh/:ma_kh", sanPhamController.laySanPhamDaBanTheoKH);
 
 router.post("/sanpham", sanPhamController.themSanPham);
 
+router.put("/sanpham/:ma_sp", sanPhamController.suaSanPham);
+
 // =============================== Phiếu Nhập ===============================
 router.get("/phieunhap", phieuNhapController.layTatCaPhieuNhap);
 router.get("/phieunhap/thangnam", phieuNhapController.layPhieuNhapTheoThangNam);
@@ -40,11 +46,15 @@ router.get("/phieunhap/ncc/:ma_ncc", phieuNhapController.layPhieuNhapTheoNCC);
 
 router.post("/phieunhap", phieuNhapController.themPhieuNhap);
 
+router.put("/phieunhap/:ma_phieu_nhap", phieuNhapController.suaPhieuNhap);
+
 // =============================== Chi Tiết Phiếu Nhập ===============================
 router.get("/ctpn", chiTietPNController.layTatCaCTPhieuNhap);
 router.get("/ctpn/:ma_ctpn", chiTietPNController.layCTPNTheoMa);
 
 router.post("/ctpn", chiTietPNController.themChiTietPhieuNhap);
+
+router.put("/ctpn/:ma_ctpn", chiTietPNController.suaChiTietPhieuNhap);
 
 // =============================== Khách Hàng ===============================
 router.get("/khachhang", khachHangController.layTatCaKhachHang);
@@ -59,9 +69,9 @@ router.get("/hoadon/:ma_hd/chi-tiet", hoaDonController.layChiTietHoaDonTheoMaHD)
 router.get("/hoadon/:ma_hd", hoaDonController.layHoaDonTheoMa);
 router.get("/hoadon/kh/:ma_kh", hoaDonController.layHoaDonTheoKH);
 
-
-
 router.post("/hoadon", hoaDonController.themHoaDon);
+
+router.put("/hoadon/:ma_hd", hoaDonController.suaHoaDon);
 
 // =============================== Chi Tiết Hóa Đơn ===============================
 router.get("/cthd", chiTietHDController.layTatCaCTHoaDon);
@@ -70,7 +80,6 @@ router.get("/cthd/:ma_cthd", chiTietHDController.layCTHDTheoMa);
 router.post("/cthd", chiTietHDController.themChiTietHoaDon);
 
 router.put("/cthd/:ma_cthd", chiTietHDController.suaChiTietHoaDon);
-
 
 // =============================== ===============================
 export default router;
