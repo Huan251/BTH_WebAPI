@@ -113,10 +113,84 @@ const layPhieuNhapTheoThangNam = async (req, res, next) => {
     }
 };
 
+// Thêm phiếu nhập
+const themPhieuNhap = async (req, res, next) => {
+    let con;
+    try {
+        const { ma_phieu_nhap, ma_ncc, ngay_nhap } = req.body;
+
+        if (!ma_phieu_nhap || !ma_ncc || !ngay_nhap)
+            return next(httpErrors(400, "Thiếu thông tin phiếu nhập!"));
+
+        if (isNaN(ma_phieu_nhap) || ma_phieu_nhap <= 0)
+            return next(httpErrors(400, "Mã phiếu nhập phải là số nguyên dương!"));
+
+        if (isNaN(ma_ncc))
+            return next(httpErrors(400, "Mã NCC phải là số!"));
+
+        con = await pool.getConnection();
+
+        // kiểm tra mã phiếu nhập tồn tại
+        const [check] = await con.query(
+            "SELECT ma_phieu_nhap FROM PhieuNhap WHERE ma_phieu_nhap=?",
+            [ma_phieu_nhap]
+        );
+        if (check.length > 0)
+            return next(httpErrors(400, "Phiếu nhập đã tồn tại!"));
+
+        // kiểm tra NCC tồn tại
+        const [ncc] = await con.query(
+            "SELECT ma_ncc FROM NhaCungCap WHERE ma_ncc=?",
+            [ma_ncc]
+        );
+        if (ncc.length === 0)
+            return next(httpErrors(400, "Nhà cung cấp không tồn tại!"));
+
+        await con.query(
+            "INSERT INTO PhieuNhap(ma_phieu_nhap, ma_ncc, ngay_nhap) VALUES (?,?,?)",
+            [ma_phieu_nhap, ma_ncc, ngay_nhap]
+        );
+
+        res.json({ message: "Thêm phiếu nhập thành công!" });
+
+    } catch (err) {
+        next(httpErrors(500, err.message));
+    } finally {
+        if (con) con.release();
+    }
+};
+
+const suaPhieuNhap = async (req, res, next) => {
+    let con;
+    try {
+        const { ma_phieu_nhap } = req.params;
+        const { ma_ncc, ngay_nhap } = req.body;
+
+        if (isNaN(ma_phieu_nhap))
+            return next(httpErrors(400, "Mã phiếu nhập không hợp lệ!"));
+
+        con = await pool.getConnection();
+
+        await con.query(
+            "UPDATE PhieuNhap SET ma_ncc=?, ngay_nhap=? WHERE ma_phieu_nhap=?",
+            [ma_ncc, ngay_nhap, ma_phieu_nhap]
+        );
+
+        res.json({ message: "Cập nhật phiếu nhập thành công!" });
+    } catch (err) {
+        next(httpErrors(500, err.message));
+    } finally {
+        if (con) con.release();
+    }
+};
+
 
 export const phieuNhapController = {
     layTatCaPhieuNhap,
     layPhieuNhapTheoMa,
-    layPhieuNhapTheoNCC,
     layPhieuNhapTheoThangNam,
+    layPhieuNhapTheoNCC,
+    themPhieuNhap,
+    suaPhieuNhap,
 };
+

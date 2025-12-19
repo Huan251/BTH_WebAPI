@@ -151,11 +151,93 @@ const laySanPhamDaBanTheoKH = async (req, res, next) => {
     }
 };
 
+// Thêm sản phẩm
+const themSanPham = async (req, res, next) => {
+    let con;
+    try {
+        const {
+            ma_sp, ten_sp, ma_danh_muc, ma_ncc,
+            gia_ban, gia_nhap, so_luong_ton, mo_ta
+        } = req.body;
+
+        if (!ma_sp || !ten_sp || !ma_danh_muc || !ma_ncc || gia_ban == null || gia_nhap == null || so_luong_ton == null)
+            return next(httpErrors(400, "Thiếu thông tin sản phẩm!"));
+
+        if (isNaN(ma_sp) || ma_sp <= 0)
+            return next(httpErrors(400, "Mã SP phải là số nguyên dương!"));
+
+        con = await pool.getConnection();
+
+        const [sp] = await con.query(
+            "SELECT ma_sp FROM SanPham WHERE ma_sp=?",
+            [ma_sp]
+        );
+        if (sp.length > 0)
+            return next(httpErrors(400, "Sản phẩm đã tồn tại!"));
+
+        const [dm] = await con.query(
+            "SELECT ma_danh_muc FROM DanhMuc WHERE ma_danh_muc=?",
+            [ma_danh_muc]
+        );
+        if (dm.length === 0)
+            return next(httpErrors(400, "Danh mục không tồn tại!"));
+
+        const [ncc] = await con.query(
+            "SELECT ma_ncc FROM NhaCungCap WHERE ma_ncc=?",
+            [ma_ncc]
+        );
+        if (ncc.length === 0)
+            return next(httpErrors(400, "Nhà cung cấp không tồn tại!"));
+
+        await con.query(
+            `INSERT INTO SanPham
+            (ma_sp, ten_sp, ma_danh_muc, ma_ncc, gia_ban, gia_nhap, so_luong_ton, mo_ta)
+            VALUES (?,?,?,?,?,?,?,?)`,
+            [ma_sp, ten_sp, ma_danh_muc, ma_ncc, gia_ban, gia_nhap, so_luong_ton, mo_ta || null]
+        );
+
+        res.json({ message: "Thêm sản phẩm thành công!" });
+    } catch (err) {
+        next(httpErrors(500, err.message));
+    } finally {
+        if (con) con.release();
+    }
+};
+
+const suaSanPham = async (req, res, next) => {
+    let con;
+    try {
+        const { ma_sp } = req.params;
+        const { ten_sp, ma_danh_muc, ma_ncc, gia_ban } = req.body;
+
+        if (isNaN(ma_sp))
+            return next(httpErrors(400, "Mã sản phẩm không hợp lệ!"));
+
+        if (!ten_sp || !ma_danh_muc || !ma_ncc || !gia_ban)
+            return next(httpErrors(400, "Thiếu dữ liệu cập nhật!"));
+
+        con = await pool.getConnection();
+
+        await con.query(
+            "UPDATE SanPham SET ten_sp=?, ma_danh_muc=?, ma_ncc=?, gia_ban=? WHERE ma_sp=?",
+            [ten_sp, ma_danh_muc, ma_ncc, gia_ban, ma_sp]
+        );
+
+        res.json({ message: "Cập nhật sản phẩm thành công!" });
+    } catch (err) {
+        next(httpErrors(500, err.message));
+    } finally {
+        if (con) con.release();
+    }
+};
 
 export const sanPhamController = {
     layTatCaSanPham,
     laySanPhamTheoMa,
-    laySanPhamDaNhapTheoNCC,
     laySanPhamTheoDanhMuc,
+    laySanPhamDaNhapTheoNCC,
     laySanPhamDaBanTheoKH,
+    themSanPham,
+    suaSanPham,
 };
+
