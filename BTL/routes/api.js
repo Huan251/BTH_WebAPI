@@ -7,7 +7,7 @@ import { phieuNhapController } from "../controllers/phieunhap.controller.js";
 import { chiTietPNController } from "../controllers/chitiet_phieunhap.controller.js";
 import { khachHangController } from "../controllers/khachhang.controller.js";
 import { hoaDonController } from "../controllers/hoadon.controller.js";
-import { chiTietHDController } from "../controllers/chitiet_hoadon.controller.js";
+import { chiTietHoaDonController } from "../controllers/chitiet_hoadon.controller.js";
 
 const router = Router();
 
@@ -74,12 +74,12 @@ router.post("/hoadon", hoaDonController.themHoaDon);
 router.put("/hoadon/:ma_hd", hoaDonController.suaHoaDon);
 
 // =============================== Chi Tiết Hóa Đơn ===============================
-router.get("/cthd", chiTietHDController.layTatCaCTHoaDon);
-router.get("/cthd/:ma_cthd", chiTietHDController.layCTHDTheoMa);
+router.get("/cthd", chiTietHoaDonController.layTatCaCTHoaDon);
+router.get("/cthd/:ma_cthd", chiTietHoaDonController.layCTHDTheoMa);
 
-router.post("/cthd", chiTietHDController.themChiTietHoaDon);
+router.post("/cthd", chiTietHoaDonController.themChiTietHoaDon);
 
-router.put("/cthd/:ma_cthd", chiTietHDController.suaChiTietHoaDon);
+router.put("/cthd/:ma_cthd", chiTietHoaDonController.suaChiTietHoaDon);
 
 // =============================== ===============================
 export default router;

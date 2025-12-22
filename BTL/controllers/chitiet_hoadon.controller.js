@@ -1,7 +1,7 @@
-import { chiTietHDService } from "../services/chitiet_hoadon.service.js";
+import { chiTietHoaDonService } from "../services/chitiet_hoadon.service.js";
 import { updateCTHoaDonSchema } from "../validators/chitiet_hoadons/update-chitiet_hoadon.validator.js";
 
-export const chiTietHDController = {
+export const chiTietHoaDonController = {
   layTatCaCTHoaDon: async (req, res, next) => {
     try {
       const data = await chiTietHoaDonService.getAll();
@@ -37,7 +37,7 @@ export const chiTietHDController = {
 
       const payload = updateCTHoaDonSchema.parse(req.body);
 
-      await chiTietHDService.update({
+      await updateCTHoaDonSchema.update({
         ma_cthd,
         ...payload,
       });

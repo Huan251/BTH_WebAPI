@@ -1,6 +1,6 @@
 import { pool } from "../config/database.js";
 
-export const chiTietHDRepository = {
+export const chiTietHoaDonRepository = {
   getAll: async () => {
     const db = await pool;
     const [rows] = await db.query("SELECT * FROM ChiTiet_HoaDon");

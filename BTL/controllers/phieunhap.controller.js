@@ -22,15 +22,18 @@ export const phieuNhapController = {
   },
 
   layPhieuNhapTheoNCC: async (req, res, next) => {
-    try {
-      const data = await phieuNhapService.getByNCC(
-        Number(req.params.maNCC)
-      );
-      res.json(data);
-    } catch (err) {
-      next(err);
+  try {
+    const ma_ncc = Number(req.params.ma_ncc);
+    if (isNaN(ma_ncc)) {
+      return res.status(400).json({ status: 400, message: "Mã nhà cung cấp không hợp lệ" });
     }
-  },
+
+    const data = await phieuNhapService.getByNCC(ma_ncc);
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
+},
 
   layPhieuNhapTheoThangNam: async (req, res, next) => {
     try {
