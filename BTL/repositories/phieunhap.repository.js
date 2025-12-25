@@ -2,11 +2,16 @@ import { pool } from "../config/database.js";
 import httpErrors from "http-errors";
 
 export const phieuNhapRepository = {
-  getAll: async () => {
-    const db = await pool;
-    const [rows] = await db.query("SELECT * FROM PhieuNhap");
-    return rows;
-  },
+ getAll: async () => {
+  const db = await pool;
+  const [rows] = await db.query(`
+    SELECT pn.*, ncc.ten_ncc
+    FROM PhieuNhap pn
+    JOIN NhaCungCap ncc ON pn.ma_ncc = ncc.ma_ncc
+  `);
+  return rows;
+},
+
 
   getById: async (ma_phieu_nhap) => {
     const db = await pool;

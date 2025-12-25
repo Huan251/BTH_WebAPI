@@ -9,4 +9,5 @@ export const createSanPhamSchema = z.object({
   gia_nhap: z.number().nonnegative(),
   so_luong_ton: z.number().int().nonnegative(),
   mo_ta: z.string().optional().nullable(),
+  
 });

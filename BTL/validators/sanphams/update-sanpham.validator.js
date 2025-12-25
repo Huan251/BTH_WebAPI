@@ -14,4 +14,5 @@ export const updateSanPhamSchema = z.object({
   so_luong_ton: z.number().int().nonnegative("Số lượng tồn không âm").optional(),
 
   mo_ta: z.string().optional(), 
+  
 });

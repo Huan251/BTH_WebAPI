@@ -3,11 +3,14 @@ import { logger } from "../config/logger.js";
 
 export const hoaDonRepository = {
   getAll: async () => {
-    logger.info("Repository: Fetch all HoaDon");
-    const db = await pool;
-    const [rows] = await db.query("SELECT * FROM HoaDon");
-    return rows;
-  },
+  const db = await pool;
+  const [rows] = await db.query(`
+    SELECT hd.*, kh.ten_kh
+    FROM HoaDon hd
+    JOIN KhachHang kh ON hd.ma_kh = kh.ma_kh
+  `);
+  return rows;
+},
 
   getById: async (ma_hd) => {
     const db = await pool;

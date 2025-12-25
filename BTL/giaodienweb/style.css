@@ -1,0 +1,128 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+
+  background-image: url("./Anh//Anhnen.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  min-height: 100vh;   /* 👈 QUAN TRỌNG */
+  margin: 0;
+  padding: 20px;
+}
+
+.table-wrapper {
+  max-height: 70vh;        /* 👈 bảng cao tối đa 60% màn hình */
+  overflow-y: auto;        /* 👈 cho phép cuộn dọc */
+  margin-top: 20px;
+  background: white;
+  border-radius: 8px;
+}
+
+/* giữ header cố định khi cuộn */
+.table-wrapper thead th {
+  position: sticky;
+  top: 0;
+  background: #007bff;
+  color: white;
+  z-index: 1;
+}
+
+.table-wrapper {
+  max-height: 60vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 8px;
+}
+
+/* bảng */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* header */
+thead th {
+  position: sticky;
+  top: 0;
+  background: #007bff;
+  color: white;
+  z-index: 2;
+}
+
+.form-container {
+  background: white;
+  padding: 20px;
+  max-width: 600px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  font-weight: bold;
+  display: block;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 6px;
+}
+
+.error {
+  color: red;
+  font-size: 13px;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+
+/* ô */
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+
+h1 {
+  text-align: center;
+}
+
+.menu {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.menu button {
+  margin: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background: #007bff;
+  color: white;
+}
