@@ -31,6 +31,7 @@ export const sanPhamService = {
   },
 
   create: async (payload) => {
+    payload.so_luong_ton = 0;
     if (await sanPhamRepository.existsById(payload.ma_sp))
       throw httpErrors(400, "Sản phẩm đã tồn tại!");
 

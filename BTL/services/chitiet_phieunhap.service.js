@@ -1,6 +1,7 @@
 import httpErrors from "http-errors";
 import { chiTietPhieuNhapRepository } from "../repositories/chitiet_phieunhap.repository.js";
 import { ChiTietPhieuNhapDTO } from "../dtos/chitiet_phieunhaps/chitiet_phieunhap.dto.js";
+import { sanPhamRepository } from "../repositories/sanpham.repository.js";
 
 export const chiTietPhieuNhapService = {
   getAll: async () => {
@@ -14,24 +15,26 @@ export const chiTietPhieuNhapService = {
     return new ChiTietPhieuNhapDTO(ct);
   },
 
-  create: async (data) => {
-    if (await chiTietPhieuNhapRepository.existsById(data.ma_ctpn))
-      throw httpErrors(400, "Chi tiết phiếu nhập đã tồn tại");
+ create: async (data) => {
+  if (await chiTietPhieuNhapRepository.existsById(data.ma_ctpn))
+    throw httpErrors(400, "Chi tiết phiếu nhập đã tồn tại");
 
-    if (
-      !(await chiTietPhieuNhapRepository.existsPhieuNhap(
-        data.ma_phieu_nhap
-      ))
-    )
-      throw httpErrors(400, "Phiếu nhập không tồn tại");
+  if (!(await chiTietPhieuNhapRepository.existsPhieuNhap(data.ma_phieu_nhap)))
+    throw httpErrors(400, "Phiếu nhập không tồn tại");
 
-    if (
-      !(await chiTietPhieuNhapRepository.existsSanPham(data.ma_sp))
-    )
-      throw httpErrors(400, "Sản phẩm không tồn tại");
+  if (!(await chiTietPhieuNhapRepository.existsSanPham(data.ma_sp)))
+    throw httpErrors(400, "Sản phẩm không tồn tại");
 
-    await chiTietPhieuNhapRepository.create(data);
-  },
+  // 1️⃣ Thêm chi tiết phiếu nhập
+  await chiTietPhieuNhapRepository.create(data);
+
+  // 2️⃣ CỘNG tồn kho
+  await sanPhamRepository.update({
+    ma_sp: data.ma_sp,
+    so_luong_ton_sql: `so_luong_ton + ${data.so_luong}`
+  });
+},
+
 
    update: async (payload) => {
     const { ma_phieu_nhap, ma_ncc, ngay_nhap } = payload;

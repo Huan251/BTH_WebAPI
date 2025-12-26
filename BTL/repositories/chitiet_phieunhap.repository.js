@@ -1,11 +1,22 @@
 import { pool } from "../config/database.js";
 
 export const chiTietPhieuNhapRepository = {
-  getAll: async () => {
-    const db = await pool;
-    const [rows] = await db.query("SELECT * FROM ChiTiet_PhieuNhap");
-    return rows;
-  },
+getAll: async () => {
+  const db = await pool;
+  const [rows] = await db.query(`
+    SELECT
+      ctpn.ma_ctpn,
+      ctpn.ma_phieu_nhap,
+      ctpn.ma_sp,
+      sp.ten_sp,
+      ctpn.so_luong,
+      ctpn.don_gia_nhap
+    FROM ChiTiet_PhieuNhap ctpn
+    JOIN SanPham sp ON ctpn.ma_sp = sp.ma_sp
+  `);
+  return rows;
+},
+
 
   getById: async (ma_ctpn) => {
     const db = await pool;

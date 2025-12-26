@@ -8,6 +8,7 @@ import { chiTietPNController } from "../controllers/chitiet_phieunhap.controller
 import { khachHangController } from "../controllers/khachhang.controller.js";
 import { hoaDonController } from "../controllers/hoadon.controller.js";
 import { chiTietHoaDonController } from "../controllers/chitiet_hoadon.controller.js";
+import { layTonKho } from "../controllers/tonkho.controller.js";
 
 const router = Router();
 
@@ -81,5 +82,7 @@ router.post("/cthd", chiTietHoaDonController.themChiTietHoaDon);
 
 router.put("/cthd/:ma_cthd", chiTietHoaDonController.suaChiTietHoaDon);
 
-// =============================== ===============================
+// =============================== Tồn Kho ===============================
+router.get("/tonkho", layTonKho);
+
 export default router;

@@ -31,6 +31,51 @@ function showFormOnly() {
   document.getElementById("table-area").style.display = "none";
 }
 
+/* ================== TÌM KIẾM ================== */
+let danhMucData = [];
+let nhaCungCapData = [];
+let sanPhamData = [];
+let khachHangData = [];
+let phieuNhapData = [];
+let ctPhieuNhapData = [];
+let hoaDonData = [];
+let ctHoaDonData = [];
+let tonKhoData = [];
+
+function renderSearchBox({ placeholder, onInputFunc }) {
+  const searchArea = document.getElementById("search-area");
+
+  searchArea.innerHTML = `
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="${placeholder}"
+        oninput="${onInputFunc}()"
+      />
+    </div>
+  `;
+}
+
+function searchByMaAndTen(data, maField, tenField, renderFunc) {
+  const keyword = event.target.value.toLowerCase();
+
+  const filtered = data.filter(item =>
+    item[maField].toString().includes(keyword) ||
+    item[tenField].toLowerCase().includes(keyword)
+  );
+
+  renderFunc(filtered);
+}
+
+function searchByMa(data, maField, renderFunc) {
+  const keyword = event.target.value;
+
+  const filtered = data.filter(item =>
+    item[maField].toString().includes(keyword)
+  );
+
+  renderFunc(filtered);
+}
 
 /* ================================================= */
 /* ================== DANH MỤC ===================== */
@@ -43,22 +88,25 @@ function showDanhMuc() {
   `;
   formArea.innerHTML = "";
   loadDanhMuc();
+  renderSearchBox({
+  placeholder: "🔍 Tìm theo mã hoặc tên ",
+  onInputFunc: "searchDanhMuc"
+  });
 }
 
 async function loadDanhMuc() {
-    showTableOnly();
+  showTableOnly();
+  const res = await fetch(`${API_URL}/danhmuc`);
+  danhMucData = await res.json();  
 
-    const res = await fetch(`${API_URL}/danhmuc`);
-    const data = await res.json();
-
-    renderTable(
+  renderTable(
     [
       { key: "ma_danh_muc", label: "Mã danh mục" },
       { key: "ten_danh_muc", label: "Tên danh mục" },
       { key: "mo_ta", label: "Mô tả" }
     ],
-        data
-    );
+    danhMucData
+  );
 }
 
 function formDanhMuc() {
@@ -151,6 +199,23 @@ async function checkMaDanhMuc() {
   validateSanPham();
 }
 
+function searchDanhMuc() {
+  const keyword = event.target.value.toLowerCase();
+
+  const filtered = danhMucData.filter(dm =>
+    dm.ma_danh_muc.toString().includes(keyword) ||
+    dm.ten_danh_muc.toLowerCase().includes(keyword)
+  );
+
+  renderTable(
+    [
+      { key: "ma_danh_muc", label: "Mã danh mục" },
+      { key: "ten_danh_muc", label: "Tên danh mục" },
+      { key: "mo_ta", label: "Mô tả" }
+    ],
+    filtered
+  );
+}
 
 /* ================================================= */
 /* ================= NHÀ CUNG CẤP ================== */
@@ -163,12 +228,16 @@ function showNhaCungCap() {
   `;
   formArea.innerHTML = "";
   loadNCC();
+  renderSearchBox({
+    placeholder: "🔍 Tìm theo mã hoặc tên",
+    onInputFunc: "searchNhaCungCap"
+  });
 }
 
 async function loadNCC() {
-    showTableOnly();
+  showTableOnly();
   const res = await fetch(`${API_URL}/nhacungcap`);
-  const data = await res.json();
+  nhaCungCapData = await res.json();  
 
   renderTable(
     [
@@ -178,7 +247,7 @@ async function loadNCC() {
       { key: "DiaChi", label: "Địa chỉ" },
       { key: "Email", label: "Email" }
     ],
-    data
+    nhaCungCapData
   );
 }
 
@@ -248,6 +317,25 @@ async function addNCC() {
   loadNCC();
 }
 
+function searchNhaCungCap() {
+  const keyword = event.target.value.toLowerCase();
+
+  const filtered = nhaCungCapData.filter(n =>
+    n.MaNCC.toString().includes(keyword) ||
+    n.TenNCC.toLowerCase().includes(keyword)
+  );
+
+  renderTable(
+    [
+      { key: "MaNCC", label: "Mã NCC" },
+      { key: "TenNCC", label: "Tên NCC" },
+      { key: "DienThoai", label: "Điện thoại" },
+      { key: "DiaChi", label: "Địa chỉ" },
+      { key: "Email", label: "Email" }
+    ],
+    filtered
+  );
+}
 
 async function checkMaNCC() {
   e_ma_ncc.innerText = "Đang kiểm tra...";
@@ -278,12 +366,18 @@ function showSanPham() {
   `;
   formArea.innerHTML = "";
   loadSanPham();
+  renderSearchBox({
+  placeholder: "🔍 Tìm theo mã hoặc tên",
+  onInputFunc: "searchSanPham"
+});
+
 }
 
 async function loadSanPham() {
-    showTableOnly();
+  showTableOnly();
+
   const res = await fetch(`${API_URL}/sanpham`);
-  const data = await res.json();
+  sanPhamData = await res.json();  
 
   renderTable(
     [
@@ -296,7 +390,7 @@ async function loadSanPham() {
       { key: "so_luong_ton", label: "Tồn kho" },
       { key: "mo_ta", label: "Mô tả" }
     ],
-    data
+    sanPhamData
   );
 }
 
@@ -421,7 +515,7 @@ function hienLoiSanPham(msg) {
     e_gia_nhap.innerText = msg;
   }
   else {
-    alert(msg); // fallback an toàn
+    alert(msg); 
   }
 }
 
@@ -458,7 +552,41 @@ async function addSanPham() {
   loadSanPham();
 }
 
+function searchSanPham() {
+  const keyword = event.target.value.toLowerCase();
 
+  const filtered = sanPhamData.filter(sp =>
+    sp.ma_sp.toString().includes(keyword) ||
+    sp.ten_sp.toLowerCase().includes(keyword)
+  );
+
+  renderTable(
+    [
+      { key: "ma_sp", label: "Mã SP" },
+      { key: "ten_sp", label: "Tên SP" },
+      { key: "ma_danh_muc", label: "Mã danh mục" },
+      { key: "ma_ncc", label: "Mã NCC" },
+      { key: "gia_ban", label: "Giá bán" },
+      { key: "gia_nhap", label: "Giá nhập" },
+      { key: "so_luong_ton", label: "Tồn kho" },
+      { key: "mo_ta", label: "Mô tả" }
+    ],
+    filtered
+  );
+}
+
+
+
+async function checkSanPhamTonTai() {
+  const res = await fetch(`${API_URL}/sanpham`);
+  const data = await res.json();
+  const ok = data.some(s => s.ma_sp === Number(ma_sp.value));
+
+  if (!ok) e_ma_sp.innerText = "Sản phẩm không tồn tại";
+  else e_ma_sp.innerText = "";
+
+  validateCTPN();
+}
 
 /* ================================================= */
 /* ================= KHÁCH HÀNG ==================== */
@@ -471,12 +599,17 @@ function showKhachHang() {
   `;
   formArea.innerHTML = "";
   loadKH();
+  renderSearchBox({
+    placeholder: "🔍 Tìm theo mã hoặc tên",
+    onInputFunc: "searchKhachHang"
+  });
+
 }
 
 async function loadKH() {
-    showTableOnly();
+  showTableOnly();
   const res = await fetch(`${API_URL}/khachhang`);
-  const data = await res.json();
+  khachHangData = await res.json(); 
 
   renderTable(
     [
@@ -485,9 +618,10 @@ async function loadKH() {
       { key: "DienThoai", label: "Điện thoại" },
       { key: "DiaChi", label: "Địa chỉ" }
     ],
-    data
+    khachHangData
   );
 }
+
 
 function formKH() {
   showFormOnly();
@@ -553,6 +687,24 @@ async function addKH() {
   loadKH();
 }
 
+function searchKhachHang() {
+  const keyword = event.target.value.toLowerCase();
+
+  const filtered = khachHangData.filter(kh =>
+    kh.MaKH.toString().includes(keyword) ||
+    kh.TenKH.toLowerCase().includes(keyword)
+  );
+
+  renderTable(
+    [
+      { key: "MaKH", label: "Mã KH" },
+      { key: "TenKH", label: "Tên KH" },
+      { key: "DienThoai", label: "Điện thoại" },
+      { key: "DiaChi", label: "Địa chỉ" }
+    ],
+    filtered
+  );
+}
 
 /* ================================================= */
 /* ================= PHIẾU NHẬP ==================== */
@@ -565,12 +717,17 @@ function showPhieuNhap() {
   `;
   formArea.innerHTML = "";
   loadPN();
+  renderSearchBox({
+  placeholder: "🔍 Tìm theo mã",
+  onInputFunc: "searchPhieuNhap"
+});
+
 }
 
 async function loadPN() {
-    showTableOnly();
+  showTableOnly();
   const res = await fetch(`${API_URL}/phieunhap`);
-  const data = await res.json();
+  phieuNhapData = await res.json();   // ✅
 
   renderTable(
     [
@@ -579,9 +736,10 @@ async function loadPN() {
       { key: "TenNCC", label: "Tên NCC" },
       { key: "NgayNhap", label: "Ngày nhập" }
     ],
-    data
+    phieuNhapData
   );
 }
+
 
 function formPN() {
   showFormOnly();
@@ -638,6 +796,197 @@ async function addPN() {
   loadPN();
 }
 
+function searchPhieuNhap() {
+  const keyword = event.target.value;
+
+  const filtered = phieuNhapData.filter(p =>
+    p.MaPhieuNhap.toString().includes(keyword)
+  );
+
+  renderTable(
+    [
+      { key: "MaPhieuNhap", label: "Mã PN" },
+      { key: "MaNCC", label: "Mã NCC" },
+      { key: "TenNCC", label: "Tên NCC" },
+      { key: "NgayNhap", label: "Ngày nhập" }
+    ],
+    filtered
+  );
+}
+
+async function checkPhieuNhapTonTai() {
+  const res = await fetch(`${API_URL}/phieunhap`);
+  const data = await res.json();
+  const ok = data.some(p => p.MaPhieuNhap === Number(ma_pn.value));
+
+  if (!ok) e_ma_pn.innerText = "Phiếu nhập không tồn tại";
+  else e_ma_pn.innerText = "";
+
+  validateCTPN();
+}
+
+/* ================================================= */
+/* ============= CHI TIẾT PHIẾU NHẬP =============== */
+/* ================================================= */
+function showCTPN() {
+  title.innerText = "Chi tiết phiếu nhập";
+  subMenu.innerHTML = `
+    <button onclick="loadCTPN()">📋 Hiển thị</button>
+    <button onclick="formCTPN()">➕ Thêm</button>
+  `;
+  formArea.innerHTML = "";
+  loadCTPN();
+  renderSearchBox({
+  placeholder: "🔍 Tìm theo mã",
+  onInputFunc: "searchCTPN"
+});
+
+}
+
+async function loadCTPN() {
+  showTableOnly();
+  const res = await fetch(`${API_URL}/ctpn`);
+  ctPhieuNhapData = await res.json();   // ✅
+
+  renderTable(
+    [
+      { key: "MaCTPN", label: "Mã CTPN" },
+      { key: "MaPhieuNhap", label: "Mã PN" },
+      { key: "MaSanPham", label: "Mã SP" },
+      { key: "TenSanPham", label: "Tên SP" },
+      { key: "SoLuong", label: "Số lượng" },
+      { key: "DonGiaNhap", label: "Đơn giá nhập" },
+      { key: "ThanhTien", label: "Thành tiền" }
+    ],
+    ctPhieuNhapData
+  );
+}
+
+
+function formCTPN() {
+  showFormOnly();
+  title.innerText = "Thêm chi tiết phiếu nhập";
+
+  formArea.innerHTML = `
+    <div class="form-container">
+      <div class="form-group">
+        <label>Mã CTPN</label>
+        <input id="ma_ctpn">
+        <div class="error" id="e_ma_ctpn"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Mã phiếu nhập</label>
+        <input id="ma_pn">
+        <div class="error" id="e_ma_pn"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Mã sản phẩm</label>
+        <input id="ma_sp">
+        <div class="error" id="e_ma_sp"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Số lượng</label>
+        <input id="so_luong">
+        <div class="error" id="e_so_luong"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Đơn giá nhập</label>
+        <input id="don_gia">
+        <div class="error" id="e_don_gia"></div>
+      </div>
+
+      <button id="btnAddCTPN" disabled onclick="addCTPN()">Thêm</button>
+    </div>
+  `;
+
+  document
+    .querySelectorAll("#ma_ctpn,#ma_pn,#ma_sp,#so_luong,#don_gia")
+    .forEach(el => el.addEventListener("input", validateCTPN));
+
+  ma_pn.addEventListener("blur", checkPhieuNhapTonTai);
+  ma_sp.addEventListener("blur", checkSanPhamTonTai);
+}
+
+function validateCTPN() {
+  let ok = true;
+
+  if (!ma_ctpn.value || ma_ctpn.value <= 0) {
+    e_ma_ctpn.innerText = "Mã CTPN phải > 0";
+    ok = false;
+  } else e_ma_ctpn.innerText = "";
+
+  if (!ma_pn.value || ma_pn.value <= 0) {
+    e_ma_pn.innerText = "Mã phiếu nhập không hợp lệ";
+    ok = false;
+  }
+
+  if (!ma_sp.value || ma_sp.value <= 0) {
+    e_ma_sp.innerText = "Mã sản phẩm không hợp lệ";
+    ok = false;
+  }
+
+  if (!so_luong.value || so_luong.value <= 0) {
+    e_so_luong.innerText = "Số lượng phải > 0";
+    ok = false;
+  } else e_so_luong.innerText = "";
+
+  if (!don_gia.value || don_gia.value <= 0) {
+    e_don_gia.innerText = "Đơn giá phải > 0";
+    ok = false;
+  } else e_don_gia.innerText = "";
+
+  btnAddCTPN.disabled = !ok;
+}
+
+async function addCTPN() {
+  document.querySelectorAll(".error").forEach(e => e.innerText = "");
+
+  const res = await fetch(`${API_URL}/ctpn`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ma_ctpn: Number(ma_ctpn.value),
+      ma_phieu_nhap: Number(ma_pn.value),
+      ma_sp: Number(ma_sp.value),
+      so_luong: Number(so_luong.value),
+      don_gia_nhap: Number(don_gia.value)
+    })
+  });
+
+  const result = await res.json();
+
+  if (!res.ok) {
+    e_ma_ctpn.innerText = result.message || "Lỗi dữ liệu";
+    return;
+  }
+
+  alert("Thêm chi tiết phiếu nhập thành công");
+}
+function searchCTPN() {
+  const keyword = event.target.value;
+
+  const filtered = ctPhieuNhapData.filter(ct =>
+    ct.MaCTPN.toString().includes(keyword)
+  );
+
+  renderTable(
+    [
+      { key: "MaCTPN", label: "Mã CTPN" },
+      { key: "MaPhieuNhap", label: "Mã PN" },
+      { key: "MaSanPham", label: "Mã SP" },
+      { key: "TenSanPham", label: "Tên SP" },
+      { key: "SoLuong", label: "Số lượng" },
+      { key: "DonGiaNhap", label: "Đơn giá nhập" },
+      { key: "ThanhTien", label: "Thành tiền" }
+    ],
+    filtered
+  );
+}
+
 
 /* ================================================= */
 /* ================== HÓA ĐƠN ====================== */
@@ -650,12 +999,16 @@ function showHoaDon() {
   `;
   formArea.innerHTML = "";
   loadHD();
+  renderSearchBox({
+  placeholder: "🔍 Tìm theo mã",
+  onInputFunc: "searchHoaDon"
+});
 }
 
 async function loadHD() {
-    showTableOnly();
+  showTableOnly();
   const res = await fetch(`${API_URL}/hoadon`);
-  const data = await res.json();
+  hoaDonData = await res.json();   // ✅
 
   renderTable(
     [
@@ -665,9 +1018,10 @@ async function loadHD() {
       { key: "NgayBan", label: "Ngày bán" },
       { key: "TongTien", label: "Tổng tiền" }
     ],
-    data
+    hoaDonData
   );
 }
+
 
 function formHD() {
   showFormOnly();
@@ -724,4 +1078,258 @@ async function addHD() {
   alert("Thêm hóa đơn thành công");
   loadHD();
 }
+async function checkHoaDonTonTai() {
+  const res = await fetch(`${API_URL}/hoadon`);
+  const data = await res.json();
+  const ok = data.some(h => h.MaHD === Number(ma_hd.value));
+
+  if (!ok) e_ma_hd.innerText = "Hóa đơn không tồn tại";
+  else e_ma_hd.innerText = "";
+
+  validateCTHD();
+}
+
+function searchHoaDon() {
+  const keyword = event.target.value;
+
+  const filtered = hoaDonData.filter(h =>
+    h.MaHD.toString().includes(keyword)
+  );
+
+  renderTable(
+    [
+      { key: "MaHD", label: "Mã HD" },
+      { key: "MaKH", label: "Mã KH" },
+      { key: "TenKH", label: "Tên KH" },
+      { key: "NgayBan", label: "Ngày bán" },
+      { key: "TongTien", label: "Tổng tiền" }
+    ],
+    filtered
+  );
+}
+
+
+/* ================================================= */
+/* =============== CHI TIẾT HÓA ĐƠN ================ */
+/* ================================================= */
+function showCTHD() {
+  title.innerText = "Chi tiết hóa đơn";
+  subMenu.innerHTML = `
+    <button onclick="loadCTHD()">📋 Hiển thị</button>
+    <button onclick="formCTHD()">➕ Thêm</button>
+  `;
+  formArea.innerHTML = "";
+  loadCTHD();
+  renderSearchBox({
+  placeholder: "🔍 Tìm theo mã",
+  onInputFunc: "searchCTHD"
+});
+
+}
+
+async function loadCTHD() {
+  showTableOnly();
+
+  const res = await fetch(`${API_URL}/cthd`);
+  ctHoaDonData = await res.json();   // ⭐ CỰC QUAN TRỌNG
+
+  renderTable(
+    [
+      { key: "MaCTHD", label: "Mã CTHD" },
+      { key: "MaHoaDon", label: "Mã hóa đơn" },
+      { key: "MaSanPham", label: "Mã sản phẩm" },
+      { key: "TenSanPham", label: "Tên sản phẩm" },
+      { key: "SoLuong", label: "Số lượng" },
+      { key: "DonGiaBan", label: "Đơn giá bán" },
+      { key: "ThanhTien", label: "Thành tiền" }
+    ],
+    ctHoaDonData
+  );
+}
+
+
+
+function formCTHD() {
+  showFormOnly();
+  title.innerText = "Thêm chi tiết hóa đơn";
+
+  formArea.innerHTML = `
+    <div class="form-container">
+      <div class="form-group">
+        <label>Mã CTHD</label>
+        <input id="ma_cthd">
+        <div class="error" id="e_ma_cthd"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Mã hóa đơn</label>
+        <input id="ma_hd">
+        <div class="error" id="e_ma_hd"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Mã sản phẩm</label>
+        <input id="ma_sp">
+        <div class="error" id="e_ma_sp"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Số lượng</label>
+        <input id="so_luong">
+        <div class="error" id="e_so_luong"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Đơn giá bán</label>
+        <input id="don_gia">
+        <div class="error" id="e_don_gia"></div>
+      </div>
+
+      <button id="btnAddCTHD" disabled onclick="addCTHD()">Thêm</button>
+    </div>
+  `;
+
+  document
+    .querySelectorAll("#ma_cthd,#ma_hd,#ma_sp,#so_luong,#don_gia")
+    .forEach(el => el.addEventListener("input", validateCTHD));
+
+  ma_hd.addEventListener("blur", checkHoaDonTonTai);
+  ma_sp.addEventListener("blur", checkSanPhamTonTai);
+}
+
+function validateCTHD() {
+  let ok = true;
+
+  if (!ma_cthd.value || ma_cthd.value <= 0) {
+    e_ma_cthd.innerText = "Mã CTHD phải > 0";
+    ok = false;
+  } else e_ma_cthd.innerText = "";
+
+  if (!ma_hd.value || ma_hd.value <= 0) {
+    e_ma_hd.innerText = "Mã hóa đơn không hợp lệ";
+    ok = false;
+  }
+
+  if (!ma_sp.value || ma_sp.value <= 0) {
+    e_ma_sp.innerText = "Mã sản phẩm không hợp lệ";
+    ok = false;
+  }
+
+  if (!so_luong.value || so_luong.value <= 0) {
+    e_so_luong.innerText = "Số lượng phải > 0";
+    ok = false;
+  } else e_so_luong.innerText = "";
+
+  if (!don_gia.value || don_gia.value <= 0) {
+    e_don_gia.innerText = "Đơn giá phải > 0";
+    ok = false;
+  } else e_don_gia.innerText = "";
+
+  btnAddCTHD.disabled = !ok;
+}
+
+async function addCTHD() {
+  document.querySelectorAll(".error").forEach(e => e.innerText = "");
+
+  const res = await fetch(`${API_URL}/cthd`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ma_cthd: Number(ma_cthd.value),
+      ma_hd: Number(ma_hd.value),
+      ma_sp: Number(ma_sp.value),
+      so_luong: Number(so_luong.value),
+      don_gia_ban: Number(don_gia.value)
+    })
+  });
+
+  const result = await res.json();
+
+  if (!res.ok) {
+    e_ma_cthd.innerText = result.message || "Lỗi dữ liệu";
+    return;
+  }
+
+  alert("Thêm chi tiết hóa đơn thành công");
+}
+function searchCTHD() {
+  const keyword = event.target.value;
+
+  const filtered = ctHoaDonData.filter(ct =>
+    ct.MaCTHD.toString().includes(keyword)
+  );
+
+  renderTable(
+    [
+      { key: "MaCTHD", label: "Mã CTHD" },
+      { key: "MaHoaDon", label: "Mã HD" },
+      { key: "MaSanPham", label: "Mã SP" },
+      { key: "TenSanPham", label: "Tên SP" },
+      { key: "SoLuong", label: "Số lượng" },
+      { key: "DonGiaBan", label: "Đơn giá bán" },
+      { key: "ThanhTien", label: "Thành tiền" }
+    ],
+    filtered
+  );
+}
+
+
+
+/* ================================================= */
+/* =================== TỒN KHO ===================== */
+/* ================================================= */
+
+function showTonKho() {
+  title.innerText = "Bảng tồn kho";
+  subMenu.innerHTML = `<button onclick="loadTonKho()">📋 Hiển thị</button>`;
+  formArea.innerHTML = "";
+  loadTonKho();
+  renderSearchBox({
+  placeholder: "🔍 Tìm theo mã ",
+  onInputFunc: "searchTonKho"
+});
+
+}
+
+async function loadTonKho() {
+  showTableOnly();
+
+  const res = await fetch(`${API_URL}/tonkho`);
+  tonKhoData = await res.json();   // ⭐ CỰC QUAN TRỌNG
+
+  renderTable(
+    [
+      { key: "ma_sp", label: "Mã sản phẩm" },
+      { key: "ten_sp", label: "Tên sản phẩm" },
+      { key: "ma_ncc", label: "Mã NCC" },
+      { key: "ten_ncc", label: "Tên NCC" },
+      { key: "sl_nhap", label: "Số lượng nhập" },
+      { key: "sl_ban", label: "Số lượng bán" },
+      { key: "ton_kho", label: "Số lượng tồn" }
+    ],
+    tonKhoData
+  );
+}
+
+function searchTonKho() {
+  const keyword = event.target.value;
+
+  const filtered = tonKhoData.filter(t =>
+    t.ma_sp.toString().includes(keyword)
+  );
+
+  renderTable(
+    [
+      { key: "ma_sp", label: "Mã sản phẩm" },
+      { key: "ten_sp", label: "Tên sản phẩm" },
+      { key: "ma_ncc", label: "Mã NCC" },
+      { key: "ten_ncc", label: "Tên NCC" },
+      { key: "sl_nhap", label: "Số lượng nhập" },
+      { key: "sl_ban", label: "Số lượng bán" },
+      { key: "ton_kho", label: "Số lượng tồn" }
+    ],
+    filtered
+  );
+}
+
 

@@ -24,11 +24,12 @@ export const chiTietHoaDonController = {
 
   themChiTietHoaDon: async (req, res, next) => {
     try {
-      await chiTietHoaDonService.create(req.body);
-      res.json({ message: "Thêm chi tiết hóa đơn thành công!" });
+      const result = await service.create(req.body);
+      res.json(result);
     } catch (err) {
-      next(err);
+      res.status(400).json({ message: err.message });
     }
+
   },
 
    suaChiTietHoaDon: async (req, res, next) => {

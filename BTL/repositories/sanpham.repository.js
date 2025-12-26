@@ -156,8 +156,15 @@ export const sanPhamRepository = {
     const keys = Object.keys(fields);
     if (keys.length === 0) return 0;
 
-    const setClause = keys.map(k => `${k} = ?`).join(", ");
-    const values = keys.map(k => fields[k]);
+    const setClause = keys
+  .map(k =>
+    k.endsWith("_sql") ? k.replace("_sql", "") + " = " + fields[k] : `${k} = ?`
+  )
+  .join(", ");
+
+const values = keys
+  .filter(k => !k.endsWith("_sql"))
+  .map(k => fields[k]);
 
    const con = await pool.getConnection();
         try {
