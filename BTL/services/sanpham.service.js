@@ -86,4 +86,30 @@ export const sanPhamService = {
     if (affected === 0)
       throw httpErrors(400, "Không có dữ liệu nào được cập nhật!");
   },
+    delete: async (ma_sp) => {
+      // 1. tồn tại?
+      const exists = await sanPhamRepository.existsById(ma_sp);
+      if (!exists) {
+        throw httpErrors(404, "Sản phẩm không tồn tại");
+      }
+
+      // 2. check chi tiết hóa đơn
+      if (await sanPhamRepository.existsInChiTietHoaDon(ma_sp)) {
+        throw httpErrors(
+          409,
+          "Không thể xóa: Sản phẩm đã tồn tại trong hóa đơn"
+        );
+      }
+
+      // 3. check chi tiết phiếu nhập
+      if (await sanPhamRepository.existsInChiTietPhieuNhap(ma_sp)) {
+        throw httpErrors(
+          409,
+          "Không thể xóa: Sản phẩm đã tồn tại trong phiếu nhập"
+        );
+      }
+
+      // 4. xóa
+      await sanPhamRepository.deleteById(ma_sp);
+    },
 };

@@ -78,4 +78,10 @@ export const chiTietPhieuNhapService = {
     if (affected === 0)
       throw httpErrors(400, "Không có dữ liệu nào được cập nhật!");
   },
+    delete: async (ma_ctpn) => {
+    const exists = await chiTietPhieuNhapRepository.existsById(ma_ctpn);
+    if (!exists) throw httpErrors(404, "Chi tiết phiếu nhập không tồn tại");
+
+    await chiTietPhieuNhapRepository.deleteById(ma_ctpn);
+  },
 };

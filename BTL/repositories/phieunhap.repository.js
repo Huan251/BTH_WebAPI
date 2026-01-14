@@ -12,7 +12,6 @@ export const phieuNhapRepository = {
   return rows;
 },
 
-
   getById: async (ma_phieu_nhap) => {
     const db = await pool;
     const [rows] = await db.query(
@@ -93,4 +92,30 @@ export const phieuNhapRepository = {
       throw httpErrors(400, "Không có dữ liệu nào được cập nhật!");
     }
   },
+  existsInChiTiet: async (ma_phieu_nhap) => {
+  const con = await pool.getConnection();
+  try {
+    const [rows] = await con.execute(
+      "SELECT 1 FROM ChiTiet_PhieuNhap WHERE ma_phieu_nhap = ? LIMIT 1",
+      [ma_phieu_nhap]
+    );
+    return rows.length > 0;
+  } finally {
+    con.release();
+  }
+},
+
+deleteById: async (ma_phieu_nhap) => {
+  const con = await pool.getConnection();
+  try {
+    const [result] = await con.execute(
+      "DELETE FROM PhieuNhap WHERE ma_phieu_nhap = ?",
+      [ma_phieu_nhap]
+    );
+    return result.affectedRows;
+  } finally {
+    con.release();
+  }
+},
+
 };

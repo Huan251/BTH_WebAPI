@@ -11,7 +11,7 @@ import { khachHangController } from "../controllers/khachhang.controller.js";
 import { hoaDonController } from "../controllers/hoadon.controller.js";
 import { chiTietHoaDonController } from "../controllers/chitiet_hoadon.controller.js";
 import { layTonKho } from "../controllers/tonkho.controller.js";
-
+import { LoiNhuan } from "../controllers/loinhuan.controller.js";
 const router = Router();
 
 /* =============================== ĐĂNG NHẬP =============================== */
@@ -22,12 +22,14 @@ router.get("/danhmuc", danhMucController.layTatCaDanhMuc);
 router.get("/danhmuc/:ma_danh_muc", danhMucController.layDanhMucTheoMa);
 router.post("/danhmuc", danhMucController.themDanhMuc);
 router.put("/danhmuc/:ma_danh_muc", danhMucController.suaDanhMuc);
+router.delete("/danhmuc/:ma_danh_muc", danhMucController.xoaDanhMuc);
 
 // =============================== Nhà Cung Cấp ===============================
 router.get("/nhacungcap", nhaCungCapController.layTatCaNhaCungCap);
 router.get("/nhacungcap/:ma_ncc", nhaCungCapController.layNCCTheoMa);
 router.post("/nhacungcap", nhaCungCapController.themNhaCungCap);
 router.put("/nhacungcap/:ma_ncc", nhaCungCapController.suaNhaCungCap);
+router.delete("/nhacungcap/:ma_ncc", nhaCungCapController.xoaNhaCungCap);
 
 // =============================== Sản Phẩm ===============================
 router.get("/sanpham", sanPhamController.layTatCaSanPham);
@@ -37,6 +39,7 @@ router.get("/sanpham/danhmuc/:ma_danh_muc", sanPhamController.laySanPhamTheoDanh
 router.get("/sanpham/kh/:ma_kh", sanPhamController.laySanPhamDaBanTheoKH);
 router.post("/sanpham", sanPhamController.themSanPham);
 router.put("/sanpham/:ma_sp", sanPhamController.suaSanPham);
+router.delete("/sanpham/:ma_sp", sanPhamController.xoaSanPham);
 
 // =============================== Phiếu Nhập ===============================
 router.get("/phieunhap", phieuNhapController.layTatCaPhieuNhap);
@@ -45,6 +48,7 @@ router.get("/phieunhap/:ma_phieu_nhap", phieuNhapController.layPhieuNhapTheoMa);
 router.get("/phieunhap/ncc/:ma_ncc", phieuNhapController.layPhieuNhapTheoNCC);
 router.post("/phieunhap", phieuNhapController.themPhieuNhap);
 router.put("/phieunhap/:ma_phieu_nhap", phieuNhapController.suaPhieuNhap);
+router.delete("/phieunhap/:ma_phieu_nhap", phieuNhapController.xoaPhieuNhap);
 
 // =============================== Chi Tiết Phiếu Nhập ===============================
 router.get("/ctpn/phieunhap/:ma_phieu_nhap",chiTietPNController.layCTPNTheoMaPhieuNhap);
@@ -52,11 +56,14 @@ router.get("/ctpn", chiTietPNController.layTatCaCTPhieuNhap);
 router.get("/ctpn/:ma_ctpn", chiTietPNController.layCTPNTheoMa);
 router.post("/ctpn", chiTietPNController.themChiTietPhieuNhap);
 router.put("/ctpn/:ma_ctpn", chiTietPNController.suaChiTietPhieuNhap);
+router.delete("/ctpn/:ma_ctpn", chiTietPNController.xoaChiTietPhieuNhap);
+
 
 // =============================== Khách Hàng ===============================
 router.get("/khachhang", khachHangController.layTatCaKhachHang);
 router.get("/khachhang/:ma_kh", khachHangController.layKhachHangTheoMa);
 router.post("/khachhang", khachHangController.themKhachHang);
+router.delete("/khachhang/:ma_kh", khachHangController.xoaKhachHang);
 
 // =============================== Hóa Đơn ===============================
 router.get("/hoadon", hoaDonController.layTatCaHoaDon);
@@ -67,7 +74,7 @@ router.get("/hoadon/kh/:ma_kh", hoaDonController.layHoaDonTheoKH);
 router.post("/hoadon", hoaDonController.themHoaDon);
 router.put("/hoadon/:ma_hd", hoaDonController.suaHoaDon);
 router.get("/hoadon/lsmh/:ma_kh",hoaDonController.layLichSuMuaHangTheoKH);
-
+router.delete("/hoadon/:ma_hd", hoaDonController.xoaHoaDon);
 
 // =============================== Chi Tiết Hóa Đơn ===============================
 router.get("/cthd/hoadon/:ma_hd",chiTietHoaDonController.layCTHDTheoMaHD);
@@ -75,8 +82,13 @@ router.get("/cthd", chiTietHoaDonController.layTatCaCTHoaDon);
 router.get("/cthd/:ma_cthd", chiTietHoaDonController.layCTHDTheoMa);
 router.post("/cthd", chiTietHoaDonController.themChiTietHoaDon);
 router.put("/cthd/:ma_cthd", chiTietHoaDonController.suaChiTietHoaDon);
+router.delete("/cthd/:ma_cthd", chiTietHoaDonController.xoaChiTietHoaDon);
 
 // =============================== Tồn Kho ===============================
 router.get("/tonkho", layTonKho);
 
+// =============================== Lợi Nhuận ===============================
+
+router.get("/loinhuan/sanpham", LoiNhuan.theoSanPham);
+router.get("/loinhuan/thang", LoiNhuan.theoThang);
 export default router;

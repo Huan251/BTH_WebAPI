@@ -3,6 +3,7 @@ import { pool } from "../config/database.js";
 import { chiTietHoaDonRepository } from "../repositories/chitiet_hoadon.repository.js";
 import { ChiTietHoaDonDTO } from "../dtos/chitiet_hoadons/chitiet_hoadon.dto.js";
 import { sanPhamRepository } from "../repositories/sanpham.repository.js";
+import tonKhoRepository from "../repositories/tonkho.repository.js";
 
 
 export const chiTietHoaDonService = {
@@ -34,23 +35,25 @@ getByMaHoaDon: async (ma_hd) => {
  create: async (data) => {
   const { ma_sp, so_luong } = data;
 
-  // 1️⃣ Lấy sản phẩm + tồn kho hiện tại
+  // 1️⃣ kiểm tra sản phẩm tồn tại
   const sanPham = await sanPhamRepository.getById(ma_sp);
-  if (!sanPham) throw httpErrors(400, "Sản phẩm không tồn tại!");
-
-  // 2️⃣ Chặn bán vượt tồn
-  if (sanPham.so_luong_ton < so_luong) {
-    throw httpErrors(400, "Số lượng bán vượt quá tồn kho!");
+  if (!sanPham) {
+    throw httpErrors(400, "Sản phẩm không tồn tại");
   }
 
-  // 3️⃣ Thêm chi tiết hóa đơn
-  await chiTietHoaDonRepository.create(data);
+  // 2️⃣ lấy tồn kho (đã là NUMBER)
+  const tonKho = await tonKhoRepository.getTonKhoBySanPham(ma_sp);
 
-  // 4️⃣ Trừ tồn kho
-  await sanPhamRepository.update({
-    ma_sp,
-    so_luong_ton_sql: `so_luong_ton - ${so_luong}`,
-  });
+  // 3️⃣ CHẶN BÁN
+  if (so_luong > tonKho) {
+    throw httpErrors(
+      400,
+      `Kho không đủ số lượng, còn có ${tonKho}`
+    );
+  }
+
+  // 4️⃣ insert chi tiết hóa đơn
+  await chiTietHoaDonRepository.create(data);
 },
 
 
@@ -81,5 +84,11 @@ getByMaHoaDon: async (ma_hd) => {
 
     if (affected === 0)
       throw httpErrors(400, "Không có dữ liệu nào được cập nhật!");
+  },
+   delete: async (ma_cthd) => {
+    const exists = await chiTietHoaDonRepository.existsById(ma_cthd);
+    if (!exists) throw httpErrors(404, "Chi tiết hóa đơn không tồn tại");
+
+    await chiTietHoaDonRepository.deleteById(ma_cthd);
   },
 };

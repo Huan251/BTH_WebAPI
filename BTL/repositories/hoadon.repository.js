@@ -122,5 +122,30 @@ export const hoaDonRepository = {
 
   return tongTien;
 },
+existsInChiTiet: async (ma_hd) => {
+  const con = await pool.getConnection();
+  try {
+    const [rows] = await con.execute(
+      "SELECT 1 FROM ChiTiet_HoaDon WHERE ma_hd = ? LIMIT 1",
+      [ma_hd]
+    );
+    return rows.length > 0;
+  } finally {
+    con.release();
+  }
+},
+
+deleteById: async (ma_hd) => {
+  const con = await pool.getConnection();
+  try {
+    const [result] = await con.execute(
+      "DELETE FROM HoaDon WHERE ma_hd = ?",
+      [ma_hd]
+    );
+    return result.affectedRows;
+  } finally {
+    con.release();
+  }
+},
 
 };

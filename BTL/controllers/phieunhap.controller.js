@@ -72,5 +72,14 @@ export const phieuNhapController = {
       next(err);
     }
   },
+xoaPhieuNhap: async (req, res, next) => {
+  try {
+    const ma_phieu_nhap = Number(req.params.ma_phieu_nhap);
+    await phieuNhapService.delete(ma_phieu_nhap);
+    res.json({ message: "Xóa phiếu nhập thành công!" });
+  } catch (e) {
+    next(e);
+  }
+},
 
 };

@@ -385,5 +385,5 @@ BEGIN
         FROM SanPham 
         WHERE ma_sp = NEW.ma_sp
     );
-END //
+END 
 DELIMITER ;

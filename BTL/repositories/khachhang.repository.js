@@ -35,4 +35,30 @@ export const khachHangRepository = {
       [ma_kh, ten_kh, dia_chi, dien_thoai]
     );
   },
+  existsInHoaDon: async (ma_kh) => {
+  const con = await pool.getConnection();
+  try {
+    const [rows] = await con.execute(
+      "SELECT 1 FROM HoaDon WHERE ma_kh = ? LIMIT 1",
+      [ma_kh]
+    );
+    return rows.length > 0;
+  } finally {
+    con.release();
+  }
+},
+
+deleteById: async (ma_kh) => {
+  const con = await pool.getConnection();
+  try {
+    const [result] = await con.execute(
+      "DELETE FROM KhachHang WHERE ma_kh = ?",
+      [ma_kh]
+    );
+    return result.affectedRows;
+  } finally {
+    con.release();
+  }
+},
+
 };

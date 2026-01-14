@@ -43,4 +43,14 @@ export const khachHangController = {
       next(err);
     }
   },
+  xoaKhachHang: async (req, res, next) => {
+  try {
+    const ma_kh = Number(req.params.ma_kh);
+    await khachHangService.delete(ma_kh);
+    res.json({ message: "Xóa khách hàng thành công!" });
+  } catch (e) {
+    next(e);
+  }
+},
+
 };

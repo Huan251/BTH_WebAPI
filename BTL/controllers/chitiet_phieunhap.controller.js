@@ -56,4 +56,14 @@ export const chiTietPNController = {
       next(err);
     }
   },
+  xoaChiTietPhieuNhap: async (req, res, next) => {
+  try {
+    const ma_ctpn = Number(req.params.ma_ctpn);
+    await chiTietPhieuNhapService.delete(ma_ctpn);
+    res.json({ message: "Xóa chi tiết phiếu nhập thành công!" });
+  } catch (e) {
+    next(e);
+  }
+},
+
 };

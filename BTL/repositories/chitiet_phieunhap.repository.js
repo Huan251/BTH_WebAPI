@@ -88,5 +88,30 @@ getAll: async () => {
     con.release();
   }
 },
+existsById: async (ma_ctpn) => {
+  const con = await pool.getConnection();
+  try {
+    const [rows] = await con.execute(
+      "SELECT ma_ctpn FROM ChiTiet_PhieuNhap WHERE ma_ctpn = ?",
+      [ma_ctpn]
+    );
+    return rows.length > 0;
+  } finally {
+    con.release();
+  }
+},
+
+deleteById: async (ma_ctpn) => {
+  const con = await pool.getConnection();
+  try {
+    const [result] = await con.execute(
+      "DELETE FROM ChiTiet_PhieuNhap WHERE ma_ctpn = ?",
+      [ma_ctpn]
+    );
+    return result.affectedRows;
+  } finally {
+    con.release();
+  }
+},
 
 };

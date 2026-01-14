@@ -199,7 +199,7 @@ async function update() {
 
 /* ================= TIỆN ÍCH ================= */
 function goBack() {
-  window.location.href = "../trangchu/trangchu.html";
+  window.history.back();
 }
 
 function clearErrors() {

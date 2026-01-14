@@ -37,5 +37,18 @@ export const khachHangService = {
     if (affected === 0)
       throw httpErrors(400, "Không có dữ liệu nào được cập nhật!");
   },
+   delete: async (ma_kh) => {
+    const exists = await khachHangRepository.existsById(ma_kh);
+    if (!exists) throw httpErrors(404, "Khách hàng không tồn tại");
+
+    if (await khachHangRepository.existsInHoaDon(ma_kh)) {
+      throw httpErrors(
+        409,
+        "Không thể xóa: Khách hàng đã có hóa đơn"
+      );
+    }
+
+    await khachHangRepository.deleteById(ma_kh);
+  },
 };
     

@@ -40,4 +40,14 @@ export const danhMucController = {
       next(err);
     }
   },
+  xoaDanhMuc: async (req, res, next) => {
+  try {
+    const ma_danh_muc = Number(req.params.ma_danh_muc);
+    await danhMucService.delete(ma_danh_muc);
+    res.json({ message: "Xóa danh mục thành công!" });
+  } catch (e) {
+    next(e);
+  }
+},
+
 };

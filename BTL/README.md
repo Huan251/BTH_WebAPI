@@ -35,6 +35,9 @@
 # Lấy chi tiết hóa đơn theo mã : http://localhost:3000/api/cthd/:ma_cthd
 # Lấy tất cả chi tiết hóa đơn theo mã hóa đơn : http://localhost:3000/api/cthd/hoadon/:ma_hd
 
+# Xem tồn kho : http://localhost:3000/api/tonkho
+# Xem lợi nhuận theo sản phẩm :
+# Xem lợi nhuận theo tháng : 
 
 ## ==================================== POST ====================================
 # Thêm danh mục : http://localhost:3000/api/danhmuc
@@ -175,5 +178,12 @@
 
 ## ==================================== DELETE ====================================
 
-# Xóa sản phẩm http://localhost:3000/api/sanpham/:Ma
+# Xóa sản phẩm : http://localhost:3000/api/sanpham/:ma_sp
+# Xóa khách hàng : http://localhost:3000/api/khachhang/:ma_kh
+# Xóa hóa đơn : http://localhost:3000/api/hoadon/:ma_hd
+# Xóa chi tiết hóa đơn : http://localhost:3000/api/cthd/:ma_cthd
+# Xóa phiếu nhập : http://localhost:3000/api/phieunhap/:ma_phieu_nhap
+# Xóa chi tiết phiếu nhập : http://localhost:3000/api/ctpn/:ma_ctpn
+# Xóa nhà cung cấp : http://localhost:3000/api/nhacungcap/:ma_ncc
+# Xóa danh mục : http://localhost:3000/api/danhmuc/:ma_danh_muc
 

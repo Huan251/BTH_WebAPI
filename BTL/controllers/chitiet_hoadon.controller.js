@@ -34,15 +34,16 @@ export const chiTietHoaDonController = {
 
 
 
-  themChiTietHoaDon: async (req, res, next) => {
-    try {
-      const result = await service.create(req.body);
-      res.json(result);
-    } catch (err) {
-      res.status(400).json({ message: err.message });
-    }
-
-  },
+themChiTietHoaDon: async (req, res, next) => {
+  try {
+    await chiTietHoaDonService.create(req.body);
+    res.status(201).json({
+      message: "Thêm chi tiết hóa đơn thành công"
+    });
+  } catch (err) {
+    next(err);
+  }
+},
 
    suaChiTietHoaDon: async (req, res, next) => {
     try {
@@ -64,4 +65,14 @@ export const chiTietHoaDonController = {
       next(err);
     }
   },
+  xoaChiTietHoaDon: async (req, res, next) => {
+  try {
+    const ma_cthd = Number(req.params.ma_cthd);
+    await chiTietHoaDonService.delete(ma_cthd);
+    res.json({ message: "Xóa chi tiết hóa đơn thành công!" });
+  } catch (e) {
+    next(e);
+  }
+},
+
 };

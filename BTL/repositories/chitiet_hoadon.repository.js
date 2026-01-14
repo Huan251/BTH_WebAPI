@@ -86,4 +86,30 @@ getAll: async () => {
       con.release();
     }
   },
+  existsById: async (ma_cthd) => {
+  const con = await pool.getConnection();
+  try {
+    const [rows] = await con.execute(
+      "SELECT ma_cthd FROM ChiTiet_HoaDon WHERE ma_cthd = ?",
+      [ma_cthd]
+    );
+    return rows.length > 0;
+  } finally {
+    con.release();
+  }
+},
+
+deleteById: async (ma_cthd) => {
+  const con = await pool.getConnection();
+  try {
+    const [result] = await con.execute(
+      "DELETE FROM ChiTiet_HoaDon WHERE ma_cthd = ?",
+      [ma_cthd]
+    );
+    return result.affectedRows;
+  } finally {
+    con.release();
+  }
+},
+
 };

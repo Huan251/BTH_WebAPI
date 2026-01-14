@@ -40,4 +40,19 @@ export const danhMucService = {
     if (affected === 0)
       throw httpErrors(404, "Danh mục không tồn tại!");
   },
+
+  delete: async (ma_danh_muc) => {
+    const exists = await danhMucRepository.existsById(ma_danh_muc);
+    if (!exists) throw httpErrors(404, "Danh mục không tồn tại");
+
+    if (await danhMucRepository.existsInSanPham(ma_danh_muc)) {
+      throw httpErrors(
+        409,
+        "Không thể xóa: Danh mục đang chứa sản phẩm"
+      );
+    }
+
+    await danhMucRepository.deleteById(ma_danh_muc);
+  },
+
 };

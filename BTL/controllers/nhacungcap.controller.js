@@ -42,4 +42,14 @@ export const nhaCungCapController = {
       next(err);
     }
   },
+  xoaNhaCungCap: async (req, res, next) => {
+  try {
+    const ma_ncc = Number(req.params.ma_ncc);
+    await nhaCungCapService.delete(ma_ncc);
+    res.json({ message: "Xóa nhà cung cấp thành công!" });
+  } catch (e) {
+    next(e);
+  }
+},
+
 };

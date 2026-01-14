@@ -50,6 +50,7 @@ const COLUMN_LABELS = {
     sl_nhap: "Số lượng nhập",
     sl_ban: "Số lượng bán",
     so_luong_ton: "Tồn kho",
+    ton_kho: "Tồn kho",
     gia_nhap: "Giá nhập",
     gia_ban: "Giá bán",
 
@@ -136,7 +137,7 @@ document.querySelectorAll(".function-card").forEach(card => {
   card.addEventListener("click", async () => {
     const type = card.dataset.type;
     currentType = type; // ⭐ RẤT QUAN TRỌNG
-
+  sessionStorage.setItem("currentTab", type);
     try {
 
       /* ===== SẢN PHẨM ===== */
@@ -281,14 +282,15 @@ document.querySelectorAll(".header-btn:not(.no-click)").forEach(btn => {
 });
 
 async function loadTonKho() {
-    const res = await fetch(API_URL + "/sanpham");
+    const res = await fetch(API_URL + "/tonkho");
     const data = await res.json();
 
-    currentHeaders = ["ma_sp", "ten_sp", "so_luong_ton", "gia_nhap", "gia_ban"];
+    currentHeaders = ["ma_sp", "ten_sp", "ton_kho", "gia_nhap", "gia_ban"];
+
     currentData = data.map(sp => ({
         ma_sp: sp.ma_sp,
         ten_sp: sp.ten_sp,
-        so_luong_ton: sp.so_luong_ton,
+        ton_kho: sp.ton_kho,
         gia_nhap: sp.gia_nhap,
         gia_ban: sp.gia_ban
     }));
@@ -307,19 +309,77 @@ async function loadTonKho() {
     `;
 }
 
-
 async function loadLoiTheoSanPham() {
-    const res = await fetch(API_URL + "/sanpham");
-    const data = await res.json();
+    const [resSP, resCTHD, resCTPN] = await Promise.all([
+        fetch(API_URL + "/sanpham"),
+        fetch(API_URL + "/cthd"),
+        fetch(API_URL + "/ctpn")
+    ]);
 
-    currentHeaders = ["ma_sp", "ten_sp", "loi"];
-    currentData = data.map(sp => ({
-        ma_sp: sp.ma_sp,
-        ten_sp: sp.ten_sp,
-        loi: formatMoney(
-            (sp.gia_ban - sp.gia_nhap) * sp.so_luong_ton
-        )
-    }));
+    const sanpham = await resSP.json();
+    const cthd = await resCTHD.json();
+    const ctpn = await resCTPN.json();
+
+    const map = {};
+
+    // khởi tạo
+    sanpham.forEach(sp => {
+        map[sp.ma_sp] = {
+            ma_sp: sp.ma_sp,
+            ten_sp: sp.ten_sp,
+            so_luong_ban: 0,
+            doanh_thu: 0,
+            gia_nhap: 0
+        };
+    });
+
+    // bán
+cthd.forEach(item => {
+    const maSP = item.MaSanPham;
+    if (map[maSP]) {
+        const sl = Number(item.SoLuong || 0);
+        const gia = Number(item.DonGiaBan || 0);
+
+        map[maSP].so_luong_ban += sl;
+        map[maSP].doanh_thu += sl * gia;
+    }
+});
+
+
+    // nhập
+ctpn.forEach(item => {
+    const maSP = item.MaSanPham;
+    if (map[maSP]) {
+        const sl = Number(item.SoLuong || 0);
+        const gia = Number(item.DonGiaNhap || 0);
+
+        map[maSP].gia_nhap += sl * gia;
+    }
+});
+
+
+    currentHeaders = [
+        "ma_sp",
+        "ten_sp",
+        "so_luong_ban",
+        "doanh_thu",
+        "gia_nhap",
+        "loi_nhuan"
+    ];
+
+    currentData = Object.values(map).map(item => {
+        let loiNhuan = item.doanh_thu - item.gia_nhap;
+        if (loiNhuan < 0) loiNhuan = 0;
+
+        return {
+            ma_sp: item.ma_sp,
+            ten_sp: item.ten_sp,
+            so_luong_ban: item.so_luong_ban,
+            doanh_thu: formatMoney(item.doanh_thu),
+            gia_nhap: formatMoney(item.gia_nhap),
+            loi_nhuan: formatMoney(loiNhuan)
+        };
+    });
 
     tableArea.innerHTML = `
         <div class="search-box">
@@ -335,27 +395,60 @@ async function loadLoiTheoSanPham() {
     `;
 }
 
+
+
 async function loadLoiTheoThang() {
-    const res = await fetch(API_URL + "/hoadon");
+    const res = await fetch(API_URL + "/loinhuan/thang");
     const data = await res.json();
 
-    // map 12 tháng
+    /* ===== MAP ĐỦ 12 THÁNG ===== */
     const map = {};
     for (let i = 1; i <= 12; i++) {
         map[i] = 0;
     }
 
-    data.forEach(hd => {
-        if (!hd.NgayBan) return;
+    data.forEach(item => {
+        // item.thang = "2025-02"
+        const thang = Number(item.thang.split("-")[1]); // ✅ FIX QUAN TRỌNG
 
-        const parts = hd.NgayBan.split("/"); // DD/MM/YYYY
-        const thang = Number(parts[1]);
-
-        if (!isNaN(thang)) {
-            map[thang] += Number(hd.TongTien || 0);
+        if (!isNaN(thang) && thang >= 1 && thang <= 12) {
+            map[thang] = Number(item.loi_nhuan || 0);
         }
     });
 
+    /* ===== BẢNG ===== */
+    currentHeaders = ["thang", "loi_nhuan"];
+    currentData = [];
+
+    for (let i = 1; i <= 12; i++) {
+        currentData.push({
+            thang: i,
+            loi_nhuan: formatMoney(map[i])
+        });
+    }
+
+    tableArea.innerHTML = `
+  <div class="profit-flex">
+
+    <!-- BÊN TRÁI: BIỂU ĐỒ -->
+    <div class="profit-chart">
+      <div class="profit-title">Biểu đồ</div>
+      <canvas id="profitChart"></canvas>
+    </div>
+
+    <!-- BÊN PHẢI: BẢNG -->
+    <div class="profit-table">
+      <div class="profit-title">Bảng</div>
+      ${renderTable(
+        ["thang", "loi_nhuan"],
+        currentData
+      )}
+    </div>
+
+  </div>
+`;
+
+    /* ===== BIỂU ĐỒ ===== */
     const labels = [];
     const values = [];
 
@@ -364,69 +457,75 @@ async function loadLoiTheoThang() {
         values.push(map[i]);
     }
 
-    tableArea.innerHTML = `
-        <div class="profit-flex">
-
-            <!-- BIỂU ĐỒ -->
-            <div class="profit-chart">
-            <h3 class="profit-title">Biểu đồ</h3>
-            <canvas id="profitChart"></canvas>
-            </div>
-
-            <!-- BẢNG -->
-            <div class="profit-table">
-            <h3 class="profit-title">Bảng</h3>
-            ${renderTable(
-                ["thang", "loi_nhuan"],
-                labels.map((_, i) => ({
-                thang: i + 1,
-                loi_nhuan: formatMoney(values[i])
-                }))
-            )}
-            </div>
-
-        </div>
-        `;
-
-
-
     const ctx = document.getElementById("profitChart");
 
     new Chart(ctx, {
-        type: "line",   // 👈 biểu đồ tăng
+        type: "line",
         data: {
-            labels: labels,
-            datasets: [{
-                label: "Lợi nhuận (VNĐ)",
-                data: values,
-                borderColor: "#ff9800",
-                backgroundColor: "rgba(255,152,0,0.2)",
-                tension: 0.3,      // 👈 bo cong mềm
-                fill: true,
-                pointRadius: 4,
-                pointHoverRadius: 6
-            }]
+            labels,
+           datasets: [{
+  data: values,
+  tension: 0.3,
+  fill: false,
+
+  // 🔘 chấm xám
+  pointRadius: 4,
+  pointHoverRadius: 6,
+  pointBackgroundColor: "#9e9e9e",
+  pointBorderColor: "#9e9e9e",
+
+  // 🎨 đổi màu theo xu hướng
+  segment: {
+    borderColor: ctx => {
+      const y0 = ctx.p0.parsed.y;
+      const y1 = ctx.p1.parsed.y;
+
+      if (y1 > y0) return "#1976d2"; // 🔵 Tăng
+      if (y1 < y0) return "#d32f2f"; // 🔴 Giảm
+      return "#fbc02d";              // 🟡 Giữ nguyên
+    }
+  }
+}]
+
+
         },
         options: {
-            responsive: true,
-            maintainAspectRatio: false, // 👈 RẤT QUAN TRỌNG
-            plugins: {
-                legend: {
-                    display: true
-                }
-            },
-            scales: {
-                y: {
-                    ticks: {
-                        callback: value =>
-                            value.toLocaleString("vi-VN") + " đ"
-                    }
-                }
-            }
-        }
+           plugins: {
+  legend: {
+    display: true,
+    labels: {
+      generateLabels: chart => {
+        return [
+          {
+            text: "Tăng",
+            strokeStyle: "#1976d2",
+            fillStyle: "#1976d2",
+            lineWidth: 3
+          },
+          {
+            text: "Giảm",
+            strokeStyle: "#d32f2f",
+            fillStyle: "#d32f2f",
+            lineWidth: 3
+          },
+          {
+            text: "Giữ nguyên",
+            strokeStyle: "#fbc02d",
+            fillStyle: "#fbc02d",
+            lineWidth: 3
+          }
+        ];
+      }
+    }
+  }
+}
 
+        }
     });
 }
+
+
+
 
 
 document.querySelectorAll(".profit-item").forEach(item => {
@@ -584,10 +683,10 @@ function renderTableWithSearchAndSort() {
       ${sortHtml}
     </div>
   
-    ${renderTable(currentHeaders, currentData)}
+      ${renderTable(currentHeaders, currentData)}
   `;
     if (
-        currentType === "hoadon" ||
+     currentType === "hoadon" ||
         currentType === "cthd" ||
         currentType === "ctpn"
         ) {
@@ -704,3 +803,4 @@ function getLastName(fullName) {
   const parts = fullName.trim().split(/\s+/);
   return parts[parts.length - 1].toLowerCase();
 }
+

@@ -31,4 +31,24 @@ export const nhaCungCapService = {
     const affected = await nhaCungCapRepository.update({ ma_ncc, ...data });
     if (affected === 0) throw httpErrors(400, "Không có dữ liệu nào được cập nhật!");
   },
+  delete: async (ma_ncc) => {
+    const exists = await nhaCungCapRepository.existsById(ma_ncc);
+    if (!exists) throw httpErrors(404, "Nhà cung cấp không tồn tại");
+
+    if (await nhaCungCapRepository.existsInSanPham(ma_ncc)) {
+      throw httpErrors(
+        409,
+        "Không thể xóa: Nhà cung cấp đang có sản phẩm"
+      );
+    }
+
+    if (await nhaCungCapRepository.existsInPhieuNhap(ma_ncc)) {
+      throw httpErrors(
+        409,
+        "Không thể xóa: Nhà cung cấp đã có phiếu nhập"
+      );
+    }
+
+    await nhaCungCapRepository.deleteById(ma_ncc);
+  },
 };

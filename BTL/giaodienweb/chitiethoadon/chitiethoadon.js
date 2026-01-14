@@ -8,7 +8,7 @@ const body = document.getElementById("detail-body");
 const totalBox = document.getElementById("total");
 
 /* ===== LOAD HÓA ĐƠN ===== */
-fetch(`${API_URL}/hoadon/${ma_hd}`)
+fetch(`{API_URL}$/hoadon/${ma_hd}`)
 
   .then(res => res.json())
   .then(hd => {
@@ -60,7 +60,6 @@ fetch(`${API_URL}/cthd/hoadon/${ma_hd}`)
 function format(v) {
   return Number(v).toLocaleString("vi-VN") + " đ";
 }
-
 
 function goBack() {
   window.history.back();

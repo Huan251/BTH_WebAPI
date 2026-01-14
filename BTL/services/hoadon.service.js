@@ -92,4 +92,18 @@ getChiTiet: async (ma_hd) => {
     if (affected === 0)
       throw httpErrors(400, "Không có dữ liệu nào được cập nhật!");
   },
+  
+  delete: async (ma_hd) => {
+    const hd = await hoaDonRepository.getById(ma_hd);
+    if (!hd) throw httpErrors(404, "Hóa đơn không tồn tại");
+
+    if (await hoaDonRepository.existsInChiTiet(ma_hd)) {
+      throw httpErrors(
+        409,
+        "Không thể xóa: Hóa đơn đã có chi tiết"
+      );
+    }
+
+    await hoaDonRepository.deleteById(ma_hd);
+  },
 };

@@ -64,5 +64,14 @@ suaSanPham: async (req, res, next) => {
   }
 },
 
+xoaSanPham: async (req, res, next) => {
+  try {
+    const ma_sp = Number(req.params.ma_sp);
+    await sanPhamService.delete(ma_sp);
+    res.json({ message: "Xóa sản phẩm thành công!" });
+  } catch (e) {
+    next(e);
+  }
+},
 
 };

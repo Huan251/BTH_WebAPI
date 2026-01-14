@@ -90,4 +90,14 @@ export const hoaDonController = {
       next(err);
     }
   },
+  xoaHoaDon: async (req, res, next) => {
+  try {
+    const ma_hd = Number(req.params.ma_hd);
+    await hoaDonService.delete(ma_hd);
+    res.json({ message: "Xóa hóa đơn thành công!" });
+  } catch (e) {
+    next(e);
+  }
+},
+
 };

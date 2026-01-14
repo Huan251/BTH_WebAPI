@@ -162,19 +162,61 @@ export const sanPhamRepository = {
   )
   .join(", ");
 
-const values = keys
-  .filter(k => !k.endsWith("_sql"))
-  .map(k => fields[k]);
+  const values = keys
+    .filter(k => !k.endsWith("_sql"))
+    .map(k => fields[k]);
 
-   const con = await pool.getConnection();
-        try {
-        const [result] = await con.execute(
-            `UPDATE SanPham SET ${setClause} WHERE ma_sp = ?`,
-            [...values, ma_sp]
-        );
-        return result.affectedRows;
-        } finally {
-        con.release();
-        }
-    },
+    const con = await pool.getConnection();
+          try {
+          const [result] = await con.execute(
+              `UPDATE SanPham SET ${setClause} WHERE ma_sp = ?`,
+              [...values, ma_sp]
+          );
+          return result.affectedRows;
+          } finally {
+          con.release();
+          }
+      },
+      // kiểm tra sản phẩm có trong chi tiết hóa đơn không
+existsInChiTietHoaDon: async (ma_sp) => {
+  const con = await pool.getConnection();
+  try {
+    const [rows] = await con.execute(
+      "SELECT 1 FROM ChiTiet_HoaDon WHERE ma_sp = ? LIMIT 1",
+      [ma_sp]
+    );
+    return rows.length > 0;
+  } finally {
+    con.release();
+  }
+},
+
+// kiểm tra sản phẩm có trong chi tiết phiếu nhập không
+existsInChiTietPhieuNhap: async (ma_sp) => {
+  const con = await pool.getConnection();
+  try {
+    const [rows] = await con.execute(
+      "SELECT 1 FROM ChiTiet_PhieuNhap WHERE ma_sp = ? LIMIT 1",
+      [ma_sp]
+    );
+    return rows.length > 0;
+  } finally {
+    con.release();
+  }
+},
+
+// xóa sản phẩm
+deleteById: async (ma_sp) => {
+  const con = await pool.getConnection();
+  try {
+    const [result] = await con.execute(
+      "DELETE FROM SanPham WHERE ma_sp = ?",
+      [ma_sp]
+    );
+    return result.affectedRows;
+  } finally {
+    con.release();
+  }
+},
+
 };

@@ -77,4 +77,30 @@ export const danhMucRepository = {
     const [result] = await pool.query(sql, values);
     return result.affectedRows;
   },
+    existsInSanPham: async (ma_danh_muc) => {
+    const con = await pool.getConnection();
+    try {
+      const [rows] = await con.execute(
+        "SELECT 1 FROM SanPham WHERE ma_danh_muc = ? LIMIT 1",
+        [ma_danh_muc]
+      );
+      return rows.length > 0;
+    } finally {
+      con.release();
+    }
+  },
+
+  deleteById: async (ma_danh_muc) => {
+    const con = await pool.getConnection();
+    try {
+      const [result] = await con.execute(
+        "DELETE FROM DanhMuc WHERE ma_danh_muc = ?",
+        [ma_danh_muc]
+      );
+      return result.affectedRows;
+    } finally {
+      con.release();
+    }
+  },
+
 };

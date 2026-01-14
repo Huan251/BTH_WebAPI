@@ -64,4 +64,17 @@ export const phieuNhapService = {
     if (affected === 0)
       throw httpErrors(400, "Không có dữ liệu nào được cập nhật!");
   },
+  delete: async (ma_phieu_nhap) => {
+    const exists = await phieuNhapRepository.existsById(ma_phieu_nhap);
+    if (!exists) throw httpErrors(404, "Phiếu nhập không tồn tại");
+
+    if (await phieuNhapRepository.existsInChiTiet(ma_phieu_nhap)) {
+      throw httpErrors(
+        409,
+        "Không thể xóa: Phiếu nhập đã có chi tiết"
+      );
+    }
+
+    await phieuNhapRepository.deleteById(ma_phieu_nhap);
+  },
 };

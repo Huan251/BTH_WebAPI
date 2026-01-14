@@ -73,4 +73,43 @@ export const nhaCungCapRepository = {
     const [result] = await pool.query(sql, values);
     return result.affectedRows;
   },
+  existsInSanPham: async (ma_ncc) => {
+  const con = await pool.getConnection();
+  try {
+    const [rows] = await con.execute(
+      "SELECT 1 FROM SanPham WHERE ma_ncc = ? LIMIT 1",
+      [ma_ncc]
+    );
+    return rows.length > 0;
+  } finally {
+    con.release();
+  }
+},
+
+existsInPhieuNhap: async (ma_ncc) => {
+  const con = await pool.getConnection();
+  try {
+    const [rows] = await con.execute(
+      "SELECT 1 FROM PhieuNhap WHERE ma_ncc = ? LIMIT 1",
+      [ma_ncc]
+    );
+    return rows.length > 0;
+  } finally {
+    con.release();
+  }
+},
+
+deleteById: async (ma_ncc) => {
+  const con = await pool.getConnection();
+  try {
+    const [result] = await con.execute(
+      "DELETE FROM NhaCungCap WHERE ma_ncc = ?",
+      [ma_ncc]
+    );
+    return result.affectedRows;
+  } finally {
+    con.release();
+  }
+},
+
 };
