@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Phiếu nhập kho</title>
+  <link rel="stylesheet" href="chitietphieunhap.css">
+</head>
+<body>
+<div class="phieu-container">
+
+  <!-- ===== KHUNG TRÊN (3 CỘT) ===== -->
+  <table class="header-table">
+    <tr>
+      <!-- BÊN TRÁI -->
+      <td class="header-left">
+        <div>Cửa hàng đồ chơi</div>
+        <div class="shop-name">lqHvQv</div>
+      </td>
+
+      <!-- GIỮA -->
+      <td class="header-center">
+        PHIẾU NHẬP KHO
+      </td>
+
+      <!-- BÊN PHẢI -->
+      <td class="header-right">
+        <div>Mã phiếu: <span id="ma-phieu"></span></div>
+        <div>Ngày nhập: <span id="ngay-nhap"></span></div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- ===== BẢNG CHI TIẾT ===== -->
+  <table class="detail-table">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Ảnh</th>
+        <th>Tên hàng</th>
+        <th>Số lượng</th>
+        <th>Giá nhập</th>
+        <th>Thành tiền</th>
+        <th>Ghi chú</th>
+      </tr>
+    </thead>
+    <tbody id="detail-body">
+      <!-- JS render -->
+    </tbody>
+  </table>
+
+  <!-- ===== TỔNG TIỀN ===== -->
+<div class="total-area">
+  <!-- BÊN TRÁI -->
+  <button class="back-btn" onclick="goBack()">← Trở về</button>
+
+  <!-- BÊN PHẢI -->
+  <div class="total-right">
+    <div class="total-money">
+      Tổng tiền: <span id="total"></span>
+    </div>
+    <div class="total-text" id="total-text"></div>
+  </div>
+</div>
+
+
+<script src="chitietphieunhap.js"></script>
+</body>
+</html>

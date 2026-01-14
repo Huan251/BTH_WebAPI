@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chi tiết hóa đơn</title>
+  <link rel="stylesheet" href="chitiethoadon.css" />
+</head>
+<body>
+
+<div class="invoice-container">
+
+  <!-- ===== HEADER CỬA HÀNG ===== -->
+  <div class="shop-header">
+    <div class="shop-name">CỬA HÀNG ĐỒ CHƠI lqHvQv</div>
+    <div>Đ/c: Thôn Như Phượng Hạ, Xã Nghĩa Trụ, Tỉnh Hưng Yên</div>
+    <div>Hotline: 0962331641</div>
+  </div>
+
+  <!-- ===== THÔNG TIN HÓA ĐƠN ===== -->
+  <div id="info" class="info-box"></div>
+
+  <!-- ===== BẢNG CHI TIẾT ===== -->
+  <table class="detail-table">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Ảnh</th>
+        <th>Sản phẩm</th>
+        <th>Số lượng</th>
+        <th>Đơn giá</th>
+        <th>Thành tiền</th>
+      </tr>
+    </thead>
+    <tbody id="detail-body"></tbody>
+  </table>
+
+  <!-- ===== TỔNG TIỀN ===== -->
+  <div id="total" class="total-box"></div>
+  <div id="total-text" class="money-text"></div>
+
+  <!-- ===== LỜI CẢM ƠN ===== -->
+  <div class="thanks">
+    Xin cảm ơn quý khách, hẹn gặp lại!
+  </div>
+
+  <button class="back-btn" onclick="goBack()">← Trở về</button>
+</div>
+
+<script src="chitiethoadon.js"></script>
+<script>
+  function goBack() {
+    window.history.back();
+  }
+</script>
+
+</body>
+</html>

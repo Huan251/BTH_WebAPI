@@ -21,6 +21,16 @@ export const chiTietPNController = {
       next(err);
     }
   },
+  layCTPNTheoMaPhieuNhap: async (req, res, next) => {
+    try {
+      const ma_phieu_nhap = Number(req.params.ma_phieu_nhap);
+      const data =
+        await chiTietPhieuNhapService.getByMaPhieuNhap(ma_phieu_nhap);
+      res.json(data);
+    } catch (err) {
+      next(err);
+    }
+  },
 
   themChiTietPhieuNhap: async (req, res, next) => {
     try {

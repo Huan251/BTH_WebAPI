@@ -1,7 +1,9 @@
 import httpErrors from "http-errors";
+import { pool } from "../config/database.js";
 import { chiTietHoaDonRepository } from "../repositories/chitiet_hoadon.repository.js";
 import { ChiTietHoaDonDTO } from "../dtos/chitiet_hoadons/chitiet_hoadon.dto.js";
 import { sanPhamRepository } from "../repositories/sanpham.repository.js";
+
 
 export const chiTietHoaDonService = {
   getAll: async () => {
@@ -14,6 +16,20 @@ export const chiTietHoaDonService = {
     if (!ct) throw httpErrors(404, "Không tìm thấy chi tiết hóa đơn");
     return new ChiTietHoaDonDTO(ct);
   },
+getByMaHoaDon: async (ma_hd) => {
+  const [rows] = await pool.query(
+    `
+    SELECT cthd.*, sp.ten_sp
+    FROM ChiTiet_HoaDon cthd
+    JOIN SanPham sp ON cthd.ma_sp = sp.ma_sp
+    WHERE cthd.ma_hd = ?
+    `,
+    [ma_hd]
+  );
+
+  return rows.map(row => new ChiTietHoaDonDTO(row));
+},
+
 
  create: async (data) => {
   const { ma_sp, so_luong } = data;

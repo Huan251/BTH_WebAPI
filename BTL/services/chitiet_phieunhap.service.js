@@ -1,4 +1,5 @@
 import httpErrors from "http-errors";
+import { pool } from "../config/database.js";
 import { chiTietPhieuNhapRepository } from "../repositories/chitiet_phieunhap.repository.js";
 import { ChiTietPhieuNhapDTO } from "../dtos/chitiet_phieunhaps/chitiet_phieunhap.dto.js";
 import { sanPhamRepository } from "../repositories/sanpham.repository.js";
@@ -13,6 +14,25 @@ export const chiTietPhieuNhapService = {
     const ct = await chiTietPhieuNhapRepository.getById(ma_ctpn);
     if (!ct) throw httpErrors(404, "Không tìm thấy chi tiết phiếu nhập");
     return new ChiTietPhieuNhapDTO(ct);
+  },
+    getByMaPhieuNhap: async (ma_phieu_nhap) => {
+    const [rows] = await pool.query(
+      `
+      SELECT
+        ctpn.ma_ctpn,
+        ctpn.ma_phieu_nhap,
+        ctpn.ma_sp,
+        sp.ten_sp,
+        ctpn.so_luong,
+        ctpn.don_gia_nhap
+      FROM ChiTiet_PhieuNhap ctpn
+      JOIN SanPham sp ON ctpn.ma_sp = sp.ma_sp
+      WHERE ctpn.ma_phieu_nhap = ?
+      `,
+      [ma_phieu_nhap]
+    );
+
+    return rows.map(r => new ChiTietPhieuNhapDTO(r));
   },
 
  create: async (data) => {

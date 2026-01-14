@@ -78,4 +78,49 @@ export const hoaDonRepository = {
     );
     return rows;
   },
+
+  getLichSuMuaHangTheoKH: async (ma_kh) => {
+  const [rows] = await pool.query(
+    `
+    SELECT
+      sp.ma_sp      AS MaSanPham,
+      sp.ten_sp     AS TenSanPham,
+      cthd.so_luong AS SoLuong,
+      DATE_FORMAT(hd.ngay_ban, '%d/%m/%Y') AS NgayBan
+    FROM HoaDon hd
+    JOIN ChiTiet_HoaDon cthd ON hd.ma_hd = cthd.ma_hd
+    JOIN SanPham sp ON cthd.ma_sp = sp.ma_sp
+    WHERE hd.ma_kh = ?
+    ORDER BY hd.ngay_ban DESC
+    `,
+    [ma_kh]
+  );
+
+  return rows;
+},
+
+
+
+  updateTongTienByMaHD: async (ma_hd) => {
+  const db = await pool;
+
+  const [rows] = await db.query(
+    `
+    SELECT SUM(so_luong * don_gia_ban) AS tong
+    FROM ChiTiet_HoaDon
+    WHERE ma_hd = ?
+    `,
+    [ma_hd]
+  );
+
+  const tongTien = rows[0].tong || 0;
+
+  await db.query(
+    `UPDATE HoaDon SET tong_tien = ? WHERE ma_hd = ?`,
+    [tongTien, ma_hd]
+  );
+
+  return tongTien;
+},
+
 };

@@ -64,6 +64,17 @@ export const hoaDonController = {
     }
   },
 
+  layLichSuMuaHangTheoKH: async (req, res, next) => {
+  try {
+    const { ma_kh } = req.params;
+    const data = await hoaDonService.layLichSuMuaHangTheoKH(ma_kh);
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
+},
+
+
     suaHoaDon: async (req, res, next) => {
     try {
       const ma_hd = Number(req.params.ma_hd);

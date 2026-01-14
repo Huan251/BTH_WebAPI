@@ -107,7 +107,7 @@ body {
     background: #fff;
     border-radius: 8px;
     padding: 20px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 10px rgba(13, 2, 2, 0.08);
     min-height: 300px;
     overflow-x: auto;
 }
@@ -123,11 +123,31 @@ th, td {
     padding: 8px;
     text-align: left;
 }
-
 th {
-    background: #ff9800;
-    color: #fff;
+  background: #ff9800;
+  color: white;
 }
+
+.table-khachhang th {
+  background: #1976d2;
+  color: #fff;
+}
+
+.table-hoadon th {
+  background: yellow;
+  color: #454545;
+}
+
+.table-phieunhap th {
+  background: #2e7d32;
+  color: #fff;
+}
+
+.table-danhmuc th {
+  background: #6a1b9a;
+  color: #fff;
+}
+
 
 /* ================= SEARCH BOX ================= */
 .search-box {
@@ -147,24 +167,32 @@ th {
 
 .search-input {
     width: 100%;
-    padding: 6px 10px 6px 34px;
+    padding: 6px 8px 6px 34px;
     font-size: 14px;
+      white-space: nowrap;
+  overflow-x: auto;      /* cuộn ngang khi dài */
+  overflow-y: hidden;
+
+  box-sizing: border-box;
 }
 
 /* ================= GRID SẢN PHẨM ================= */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(6, 1fr); /* ⬅ 6 ảnh / hàng */
+    gap: 16px;
 }
 
+
 .product-card {
-    background: #fff;
-    padding: 10px;
+   background: #fff;
+    padding: 4px;
     border-radius: 8px;
     text-align: center;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.25s;
+
+    border: 1px solid #ccc;       /* ⬅ viền xám */
 }
 
 .product-card:hover {
@@ -174,9 +202,14 @@ th {
 
 .product-card img {
     width: 100%;
-    height: 180px;
-    object-fit: cover;
+    height: 120px;          /* ⬅ THU NHỎ */
+    object-fit: contain;    /* ⬅ KHÔNG BỊ MÉO LOGO */
     border-radius: 6px;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .product-card h4 {
@@ -222,36 +255,72 @@ th {
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-/* ===== PROFIT DROPDOWN ===== */
+/* ===== PROFIT DROPDOWN (FIX KHÔNG BỊ MẤT) ===== */
 .profit-menu {
     position: relative;
+    width: fit-content;
 }
 
+/* nút lợi nhuận */
+.profit-menu > .header-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* menu con */
 .profit-submenu {
     position: absolute;
     top: 100%;
-    right: 0;
+    left: 0;
+
+    width: 100%;          /* ⬅ QUAN TRỌNG */
+    min-width: unset;
+
     background: #fff;
-    border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    overflow: hidden;
-    display: none;
-    z-index: 10;
+    border-radius: 10px;
+    padding: 6px 0;
+
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+
+    z-index: 999;
 }
 
-.profit-menu:hover .profit-submenu {
-    display: block;
+
+/* 🔥 GIỮ MENU KHI HOVER CẢ CHA + CON */
+.no-click {
+    pointer-events: none;
+}
+.profit-menu:hover .profit-submenu,
+.profit-submenu:hover {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
+/* item con */
 .profit-item {
-    padding: 10px 16px;
+    padding: 12px 16px;
+    font-size: 14px;
     cursor: pointer;
     white-space: nowrap;
+
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .profit-item:hover {
-    background: #f5f5f5;
+    background: #f0f4ff;
+    color: #1976d2;
 }
+
 
 /* ===== GRID NHÀ CUNG CẤP ===== */
 .supplier-grid {
@@ -283,4 +352,200 @@ th {
     max-width: 80%;
     max-height: 70%;
     object-fit: contain;
+}
+
+/* ===== PROFIT TABLE – THEO THÁNG ===== */
+.profit-table-wrapper {
+    max-width: 420px;   /* bảng ngắn lại */
+    margin: 0 auto;     /* căn giữa */
+}
+
+.profit-table-wrapper th,
+.profit-table-wrapper td {
+    text-align: center;
+}
+/* bảng lợi nhuận theo tháng – sát viền */
+.no-padding {
+    padding: 0;
+}
+
+.code-cell {
+    position: relative;
+    cursor: pointer;
+    color: inherit;
+    font-weight: normal;
+}
+
+.code-cell .tooltip {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.code-cell:hover .tooltip {
+    opacity: 1;
+}
+
+.click-row {
+  cursor: pointer;
+}
+
+.click-row:hover {
+  background-color: #e3f2fd;
+}
+
+/* ===== LỢI NHUẬN THEO THÁNG – BIỂU ĐỒ + BẢNG ===== */
+.profit-flex {
+    display: flex;
+    gap: 20px;
+    align-items: stretch; /* 👈 ép bằng chiều cao */
+}
+
+/* BIỂU ĐỒ - 60% */
+.profit-chart {
+    flex: 8;            /* 👈 60% */
+}
+
+/* BẢNG - 40% */
+.profit-table {
+    flex: 4;            /* 👈 40% */
+}
+
+/* thu nhỏ biểu đồ */
+.profit-chart {
+    height: 455px;
+}
+
+.profit-chart canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* bảng gọn hơn */
+.profit-table table {
+    font-size: 14px;
+}
+
+/* tiêu đề cho biểu đồ & bảng */
+.profit-title {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.search-sort-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.sort-box select {
+  padding: 6px 10px;
+}
+
+/* ===== SORT HOVER (PHIẾU NHẬP) ===== */
+.sort-hover {
+  position: relative;
+}
+
+.sort-btn {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.sort-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: #fff;
+  border: 1px solid #ccc;
+  z-index: 100;
+}
+
+.sort-menu div {
+  padding: 6px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.sort-menu div:hover {
+  background: #f2f2f2;
+}
+
+.sort-hover:hover .sort-menu {
+  display: block;
+}
+
+/* ===== SORT HOVER (Danh mục, Phiếu nhập, Hóa đơn...) ===== */
+.sort-hover {
+  position: relative;
+  display: inline-block;
+}
+
+/* Nút Sắp xếp */
+.sort-btn {
+  min-width: 10px;
+  padding: 8px 12px;
+  border: 2px solid #999;
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+  font-weight: 500;
+  font-size: 14px; 
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+/* Hover nút */
+.sort-btn:hover {
+  border-color: #333;
+  font-weight: bold;
+}
+
+/* Menu xổ xuống */
+.sort-menu {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  width: 100%;              /* 👈 bằng nút */
+  background: #fff;
+  border: 1.5px solid #999;
+  border-radius: 6px;
+  display: none;
+  z-index: 20;
+  overflow: hidden;
+}
+
+/* Item trong menu */
+.sort-menu div {
+  padding: 8px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+/* Hover item: KHÔNG ĐỔI MÀU – CHỈ TO + ĐẬM */
+.sort-menu div:hover {
+  font-weight: bold;
+  font-size: 15px;
+  background: #f5f5f5;
+}
+
+/* Hover cả khối thì hiện menu */
+.sort-hover:hover .sort-menu {
+  display: block;
 }

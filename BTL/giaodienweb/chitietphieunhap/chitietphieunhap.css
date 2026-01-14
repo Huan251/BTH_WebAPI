@@ -1,0 +1,100 @@
+body {
+  font-family: "Times New Roman", serif;
+  background: #f5f5f5;
+}
+
+.phieu-container {
+  width: 900px;
+  margin: 30px auto;
+  background: white;
+  padding: 20px;
+  border: 2px solid black;
+}
+
+/* ===== HEADER ===== */
+.header-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+
+.header-table td {
+  border: 1px solid black;
+  padding: 10px;
+  vertical-align: middle;
+}
+
+.header-left {
+  width: 30%;
+  text-align: center;
+  font-weight: bold;
+}
+
+.shop-name {
+  font-size: 18px;
+}
+
+.header-center {
+  width: 40%;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.header-right {
+  width: 30%;
+  font-size: 14px;
+}
+
+/* ===== TABLE CHI TIẾT ===== */
+.detail-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.detail-table th,
+.detail-table td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: center;
+}
+
+.detail-table th {
+  font-weight: bold;
+}
+
+.detail-table img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+/* ===== TỔNG TIỀN ===== */
+.total-area {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 15px;
+}
+
+.back-btn {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.total-right {
+  text-align: right;
+}
+
+.total-money {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.total-text {
+  font-style: italic;
+  margin-top: 5px;
+}
+
+
+

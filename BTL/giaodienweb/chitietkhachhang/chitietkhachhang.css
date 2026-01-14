@@ -1,0 +1,88 @@
+body {
+  font-family: "Times New Roman", serif;
+  background: #f5f5f5;
+  margin: 0;
+}
+
+.page {
+  max-width: 530px;        /* nhỏ như hóa đơn */
+  margin: 30px auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+/* ===== HEADER ===== */
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.shop-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.shop-info {
+  margin-top: 5px;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.customer-info {
+  border: 1.5px solid #000;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.info-title {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* ===== TITLE ===== */
+.title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  margin: 25px 0 15px;
+}
+
+/* ===== TABLE ===== */
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;     /* ✅ KHÔNG cắt chữ */
+}
+
+.history-table th,
+.history-table td {
+  border: 1px solid #000;
+  padding: 6px;
+  font-size: 14px;
+  text-align: center;
+
+  /* 🔑 QUAN TRỌNG – KHÔNG CÓ ... */
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.history-table th {
+  background: #f2f2f2;
+}
+
+.history-table img {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+}
+
+/* ===== BUTTON ===== */
+.back-btn {
+  margin-top: 15px;
+  padding: 5px 10px;
+  cursor: pointer;
+}

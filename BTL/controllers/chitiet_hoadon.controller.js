@@ -22,6 +22,18 @@ export const chiTietHoaDonController = {
     }
   },
 
+  layCTHDTheoMaHD: async (req, res, next) => {
+    try {
+      const ma_hd = Number(req.params.ma_hd);
+      const data = await chiTietHoaDonService.getByMaHoaDon(ma_hd);
+      res.json(data);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+
+
   themChiTietHoaDon: async (req, res, next) => {
     try {
       const result = await service.create(req.body);

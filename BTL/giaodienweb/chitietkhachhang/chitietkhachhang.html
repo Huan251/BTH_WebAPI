@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chi tiết khách hàng</title>
+  <link rel="stylesheet" href="chitietkhachhang.css">
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ===== HEADER: 2 CỘT ===== -->
+  <div class="header-row">
+
+    <!-- BÊN TRÁI -->
+    <div class="shop-block">
+      <div class="shop-name">CỬA HÀNG ĐỒ CHƠI lqHvQv</div>
+      <div class="shop-info">
+        Đ/c: Thôn Như Phượng Hạ, Xã Nghĩa Trụ, Hưng Yên<br>
+        Hotline: 0962331641
+      </div>
+    </div>
+
+    <!-- BÊN PHẢI -->
+    <div class="customer-info">
+      <div class="info-title">THÔNG TIN KHÁCH HÀNG</div>
+      <div id="kh-ma-ten"></div>
+      <div id="kh-diachi"></div>
+      <div id="kh-sdt"></div>
+    </div>
+
+  </div>
+
+  <!-- ===== TIÊU ĐỀ ===== -->
+  <div class="title">LỊCH SỬ MUA HÀNG</div>
+
+  <!-- ===== BẢNG ===== -->
+  <table class="history-table">
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Tên hàng</th>
+        <th>Ảnh</th>
+        <th>Số lượng</th>
+        <th>Ngày mua</th>
+      </tr>
+    </thead>
+    <tbody id="body"></tbody>
+  </table>
+
+  <!-- ===== NÚT ===== -->
+  <button class="back-btn" onclick="goBack()">← Trở về</button>
+
+</div>
+
+<script src="chitietkhachhang.js"></script>
+</body>
+</html>

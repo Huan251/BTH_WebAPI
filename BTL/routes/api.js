@@ -47,6 +47,7 @@ router.post("/phieunhap", phieuNhapController.themPhieuNhap);
 router.put("/phieunhap/:ma_phieu_nhap", phieuNhapController.suaPhieuNhap);
 
 // =============================== Chi Tiết Phiếu Nhập ===============================
+router.get("/ctpn/phieunhap/:ma_phieu_nhap",chiTietPNController.layCTPNTheoMaPhieuNhap);
 router.get("/ctpn", chiTietPNController.layTatCaCTPhieuNhap);
 router.get("/ctpn/:ma_ctpn", chiTietPNController.layCTPNTheoMa);
 router.post("/ctpn", chiTietPNController.themChiTietPhieuNhap);
@@ -65,8 +66,11 @@ router.get("/hoadon/:ma_hd", hoaDonController.layHoaDonTheoMa);
 router.get("/hoadon/kh/:ma_kh", hoaDonController.layHoaDonTheoKH);
 router.post("/hoadon", hoaDonController.themHoaDon);
 router.put("/hoadon/:ma_hd", hoaDonController.suaHoaDon);
+router.get("/hoadon/lsmh/:ma_kh",hoaDonController.layLichSuMuaHangTheoKH);
+
 
 // =============================== Chi Tiết Hóa Đơn ===============================
+router.get("/cthd/hoadon/:ma_hd",chiTietHoaDonController.layCTHDTheoMaHD);
 router.get("/cthd", chiTietHoaDonController.layTatCaCTHoaDon);
 router.get("/cthd/:ma_cthd", chiTietHoaDonController.layCTHDTheoMa);
 router.post("/cthd", chiTietHoaDonController.themChiTietHoaDon);

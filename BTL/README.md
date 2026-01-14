@@ -23,14 +23,18 @@
 # Lấy tất cả khách hàng : http://localhost:3000/api/khachhang
 # Lấy khách hàng theo mã : http://localhost:3000/api/khachhang/:ma_kh
 
+
 # Lấy tất cả hóa đơn : http://localhost:3000/api/hoadon
 # Lấy hóa đơn theo tháng & năm : http://localhost:3000/api/hoadon/thangnam?thang=1&nam=2025
 # Lấy hóa đơn theo mã : http://localhost:3000/api/hoadon/:ma_hd
 # Lấy hóa đơn theo khách hàng : http://localhost:3000/api/hoadon/kh/:ma_kh
 # Lấy tất cả sản phẩm của hóa đơn đó : http://localhost:3000/api/hoadon/:ma_hd/chi-tiet
+# Lấy lịch sử mua hàng của khách hàng : http://localhost:3000/api/hoadon/lsmh/:ma_kh
 
 # Lấy tất cả chi tiết hóa đơn : http://localhost:3000/api/cthd
 # Lấy chi tiết hóa đơn theo mã : http://localhost:3000/api/cthd/:ma_cthd
+# Lấy tất cả chi tiết hóa đơn theo mã hóa đơn : http://localhost:3000/api/cthd/hoadon/:ma_hd
+
 
 ## ==================================== POST ====================================
 # Thêm danh mục : http://localhost:3000/api/danhmuc

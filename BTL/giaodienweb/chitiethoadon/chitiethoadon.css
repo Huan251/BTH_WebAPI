@@ -1,0 +1,82 @@
+body {
+  font-family: Arial;
+  background: #f5f5f5;
+}
+
+.invoice-container {
+  max-width: 520px;   
+  margin: 30px auto;
+  background: rgb(255, 255, 255);
+  padding: 30px;
+  border-radius: 10px;
+}
+
+#info {
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #ff9800;
+  color: white;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+td img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.total {
+  text-align: right;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+button {
+  margin-top: 20px;
+}
+
+.shop-header {
+  text-align: center;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.shop-name {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.money-text {
+  margin-top: 5px;
+  font-style: italic;
+  text-align: right;
+}
+
+.thanks {
+  margin-top: 30px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.detail-table th:first-child,
+.detail-table td:first-child {
+  width: 45px;
+  text-align: center;
+}
+#total {
+  text-align: right;
+  margin-top: 15px;
+}

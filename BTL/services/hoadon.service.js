@@ -39,17 +39,31 @@ export const hoaDonService = {
     });
   },
 
-  getChiTiet: async (ma_hd) => {
-    const rows = await hoaDonRepository.getChiTietByMaHD(ma_hd);
-    if (!rows.length)
-      throw httpErrors(404, "Hóa đơn chưa có chi tiết");
+getChiTiet: async (ma_hd) => {
+  const rows = await hoaDonRepository.getChiTietByMaHD(ma_hd);
+  if (!rows.length)
+    throw httpErrors(404, "Hóa đơn chưa có chi tiết");
 
-    return {
-      ma_hoa_don: ma_hd,
-      so_dong: rows.length,
-      bang_chi_tiet: rows,
-    };
+  // 🔥 TÍNH & UPDATE LẠI TỔNG TIỀN
+  const tongTien = await hoaDonRepository.updateTongTienByMaHD(ma_hd);
+
+  return {
+    ma_hoa_don: ma_hd,
+    tong_tien: tongTien,
+    so_dong: rows.length,
+    bang_chi_tiet: rows,
+  };
+},
+
+  layLichSuMuaHangTheoKH: async (ma_kh) => {
+    const rows = await hoaDonRepository.getLichSuMuaHangTheoKH(ma_kh);
+
+    if (!rows.length)
+      throw httpErrors(404, "Khách hàng chưa có lịch sử mua hàng");
+
+    return rows;
   },
+
 
    update: async (payload) => {
     const { ma_hd, ...data } = payload;

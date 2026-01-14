@@ -7,28 +7,38 @@
     <link rel="stylesheet" href="trangchu.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 </head>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <body>
 <header class="header banner-header">
     <div class="header-left">
-        <h1>CỬA HÀNG ĐỒ CHƠI</h1>
+        <h1>Cửa Hàng Đồ Chơi - 𝓵𝓺𝓗𝓿𝓠𝓿</h1>
     </div>
 
     <div class="header-right">
         <button class="header-btn" data-type="tonkho">
             <i class="fa-solid fa-warehouse"></i> Tồn kho
         </button>
+
         <div class="profit-menu">
-            
-    <button class="header-btn">
-        <i class="fa-solid fa-chart-line"></i> Lợi nhuận
-    </button>
+    <div class="header-btn profit-btn no-click">
+        <i class="fa-solid fa-chart-line"></i>
+        <span>Lợi nhuận</span>
+        <i class="fa-solid fa-chevron-down arrow"></i>
+    </div>
 
     <div class="profit-submenu">
-        <div class="profit-item" data-type="loi-thang">Theo tháng</div>
-        <div class="profit-item" data-type="loi-sanpham">Theo sản phẩm</div>
+        <div class="profit-item" data-type="loi-thang">
+            <i class="fa-regular fa-calendar"></i>
+            Theo tháng
+        </div>
+        <div class="profit-item" data-type="loi-sanpham">
+            <i class="fa-solid fa-box"></i>
+            Theo sản phẩm
+        </div>
     </div>
 </div>
+
+
     </div>
 </header>
 
@@ -54,6 +64,7 @@
 </section>
 
 <script src="trangchu.js"></script>
+
 
 </body>
 </html>

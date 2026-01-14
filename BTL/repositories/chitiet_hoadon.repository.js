@@ -10,12 +10,14 @@ getAll: async () => {
       cthd.ma_sp,
       sp.ten_sp,
       cthd.so_luong,
-      cthd.don_gia_ban
+      cthd.don_gia_ban,
+      (cthd.so_luong * cthd.don_gia_ban) AS thanh_tien
     FROM ChiTiet_HoaDon cthd
     JOIN SanPham sp ON cthd.ma_sp = sp.ma_sp
   `);
   return rows;
 },
+
 
 
   getById: async (ma_cthd) => {
