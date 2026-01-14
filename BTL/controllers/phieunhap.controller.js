@@ -1,4 +1,5 @@
 import { phieuNhapService } from "../services/phieunhap.service.js";
+import { createPhieuNhapSchema } from "../validators/phieunhaps/create-phieunhap.validator.js";
 
 export const phieuNhapController = {
   layTatCaPhieuNhap: async (req, res, next) => {
@@ -47,14 +48,15 @@ export const phieuNhapController = {
     }
   },
 
-  themPhieuNhap: async (req, res, next) => {
-    try {
-      await phieuNhapService.create(req.body);
-      res.json({ message: "Thêm phiếu nhập thành công!" });
-    } catch (err) {
-      next(err);
-    }
-  },
+themPhieuNhap: async (req, res, next) => {
+  try {
+    const payload = createPhieuNhapSchema.parse(req.body);
+    await phieuNhapService.create(payload);
+    res.json({ message: "Thêm phiếu nhập thành công!" });
+  } catch (err) {
+    next(err);
+  }
+},
 
   suaPhieuNhap: async (req, res, next) => {
     try {

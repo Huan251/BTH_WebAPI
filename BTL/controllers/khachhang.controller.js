@@ -1,4 +1,5 @@
 import { khachHangService } from "../services/khachhang.service.js";
+import { createKhachHangSchema } from "../validators/khachhangs/create-khachhang.validator.js";
 import { updateKhachHangSchema } from "../validators/khachhangs/update-khachhang.validator.js";
 import { logger } from "../config/logger.js";
 
@@ -23,14 +24,15 @@ export const khachHangController = {
     }
   },
 
-  themKhachHang: async (req, res, next) => {
-    try {
-      await khachHangService.create(req.body);
-      res.json({ message: "Thêm khách hàng thành công!" });
-    } catch (err) {
-      next(err);
-    }
-  },
+themKhachHang: async (req, res, next) => {
+  try {
+    const payload = createKhachHangSchema.parse(req.body);
+    await khachHangService.create(payload);
+    res.json({ message: "Thêm khách hàng thành công!" });
+  } catch (err) {
+    next(err);
+  }
+},
   suaKhachHang: async (req, res, next) => {
     try {
       const ma_kh = Number(req.params.ma_kh);

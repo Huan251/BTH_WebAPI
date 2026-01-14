@@ -1,3 +1,5 @@
+## Thư viện : jonwebtoken, dotenv
+
 ## ==================================== GET ====================================
 
 # Lấy tất cả danh mục : http://localhost:3000/api/danhmuc
@@ -40,6 +42,7 @@
 # Xem lợi nhuận theo tháng : 
 
 ## ==================================== POST ====================================
+
 # Thêm danh mục : http://localhost:3000/api/danhmuc
 # {
 #    "ma_danh_muc": 202,
@@ -118,6 +121,7 @@
 # }
 
 ## ==================================== PUT ====================================
+
 # Sửa danh mục : http://localhost:3000/api/danhmuc/:ma_danh_muc
 # {
 #  "ten_danh_muc": "Đồ chơi điều khiển",
@@ -207,3 +211,61 @@
 # Xem tất cả : http://localhost:3000/api/adminP
 #              http://localhost:3000/api/nhanvienP
 #              http://localhost:3000/api/khachhangP
+
+
+
+
+
+## =====================================================================================
+# Luồng xử lý dữ liệu :  api.js (Router) → Controller → Validator → Service 
+# → Repository → Database (MySQL)
+
+# Ví dụ: POST /khachhang
+# 1. Client gửi request 
+# body : 
+{
+    "ma_kh": 1,
+    "ten_kh": "Nguyễn Văn A",
+    "dia_chi": "Hà Nội",
+    "dien_thoai": "0909xxx"
+}
+
+# 2. Sau khi bấm send thì ROUTER điều hướng tới router.post("/khachhang", khachHangController.themKhachHang);
+
+# 3. Tới với CONTROLLER làm 3 việc : Validate input (Zod), Gọi service, Trả response
+themKhachHang: async (req, res, next) => {
+  try {
+    // 🔒 BƯỚC 1: VALIDATOR
+    const payload = createKhachHangSchema.parse(req.body);
+
+    // 🧠 BƯỚC 2: SERVICE
+    await khachHangService.create(payload);
+
+    res.json({ message: "Thêm khách hàng thành công!" });
+  } catch (err) {
+    next(err);
+  }
+}
+
+# 4. Đến với VALIDATOR có 2 khả năng : a. Sai dữ liệu : Zod throw error + Nhảy catch + next(err) STOP → SERVICE không chạy
+#                                      b. Đúng dữ liệu : Trả về payload ; Payload = dữ liệu sạch + đúng kiểu -> Đi tiếp
+
+# 5. Tới SERVICE : Check tồn tại + Logic nghiệp vụ + Throw error nghiệp vụ -> Không nhận dữ liệu bẩn
+create: async (data) => {
+  const exists = await khachHangRepository.existsById(data.ma_kh);
+  if (exists) throw httpErrors(400, "Mã khách hàng đã tồn tại");
+
+  await khachHangRepository.create(data);
+}
+
+# 6. REPOSITORY : SQL thuần
+create: async ({ ma_kh, ten_kh, dia_chi, dien_thoai }) => {
+  await db.query(
+    "INSERT INTO KhachHang(ma_kh, ten_kh, dia_chi, dien_thoai) VALUES (?,?,?,?)",
+    [...]
+  );
+}
+
+# 7. Database (MySQL): INSERT INTO KhachHang ...
+
+# 8. Response quay ngược lại : Luồng trả kết quả sau khi xử lý xong

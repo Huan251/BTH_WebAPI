@@ -2,6 +2,8 @@ import { chiTietHoaDonService } from "../services/chitiet_hoadon.service.js";
 import { updateCTHoaDonSchema } from "../validators/chitiet_hoadons/update-chitiet_hoadon.validator.js";
 
 export const chiTietHoaDonController = {
+
+  // Lấy danh sách tất cả chi tiết hóa đơn
   layTatCaCTHoaDon: async (req, res, next) => {
     try {
       const data = await chiTietHoaDonService.getAll();
@@ -11,6 +13,7 @@ export const chiTietHoaDonController = {
     }
   },
 
+  // Lấy chi tiết hóa đơn theo mã chi tiết hóa đơn
   layCTHDTheoMa: async (req, res, next) => {
     try {
       const data = await chiTietHoaDonService.getById(
@@ -22,6 +25,7 @@ export const chiTietHoaDonController = {
     }
   },
 
+  // Lấy danh sách chi tiết hóa đơn theo mã hóa đơn
   layCTHDTheoMaHD: async (req, res, next) => {
     try {
       const ma_hd = Number(req.params.ma_hd);
@@ -32,20 +36,20 @@ export const chiTietHoaDonController = {
     }
   },
 
+  // Thêm mới chi tiết hóa đơn
+  themChiTietHoaDon: async (req, res, next) => {
+    try {
+      await chiTietHoaDonService.create(req.body);
+      res.status(201).json({
+        message: "Thêm chi tiết hóa đơn thành công"
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
 
-
-themChiTietHoaDon: async (req, res, next) => {
-  try {
-    await chiTietHoaDonService.create(req.body);
-    res.status(201).json({
-      message: "Thêm chi tiết hóa đơn thành công"
-    });
-  } catch (err) {
-    next(err);
-  }
-},
-
-   suaChiTietHoaDon: async (req, res, next) => {
+  // Cập nhật thông tin chi tiết hóa đơn theo mã chi tiết hóa đơn
+  suaChiTietHoaDon: async (req, res, next) => {
     try {
       const ma_cthd = Number(req.params.ma_cthd);
 
@@ -65,14 +69,16 @@ themChiTietHoaDon: async (req, res, next) => {
       next(err);
     }
   },
+
+  // Xóa chi tiết hóa đơn theo mã chi tiết hóa đơn
   xoaChiTietHoaDon: async (req, res, next) => {
-  try {
-    const ma_cthd = Number(req.params.ma_cthd);
-    await chiTietHoaDonService.delete(ma_cthd);
-    res.json({ message: "Xóa chi tiết hóa đơn thành công!" });
-  } catch (e) {
-    next(e);
-  }
-},
+    try {
+      const ma_cthd = Number(req.params.ma_cthd);
+      await chiTietHoaDonService.delete(ma_cthd);
+      res.json({ message: "Xóa chi tiết hóa đơn thành công!" });
+    } catch (e) {
+      next(e);
+    }
+  },
 
 };

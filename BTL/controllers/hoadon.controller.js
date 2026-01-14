@@ -1,6 +1,6 @@
 import { hoaDonService } from "../services/hoadon.service.js";
 import { updateHoaDonSchema } from "../validators/hoadons/update-hoadon.validator.js";
-
+import { createHoaDonSchema } from "../validators/hoadons/create-hoadon.validator.js";
 export const hoaDonController = {
   layTatCaHoaDon: async (req, res, next) => {
     try {
@@ -44,14 +44,15 @@ export const hoaDonController = {
     }
   },
 
-  themHoaDon: async (req, res, next) => {
-    try {
-      await hoaDonService.create(req.body);
-      res.json({ message: "Thêm hóa đơn thành công!" });
-    } catch (err) {
-      next(err);
-    }
-  },
+themHoaDon: async (req, res, next) => {
+  try {
+    const payload = createHoaDonSchema.parse(req.body);
+    await hoaDonService.create(payload);
+    res.json({ message: "Thêm hóa đơn thành công!" });
+  } catch (err) {
+    next(err);
+  }
+},
 
   layChiTietHoaDonTheoMaHD: async (req, res, next) => {
     try {

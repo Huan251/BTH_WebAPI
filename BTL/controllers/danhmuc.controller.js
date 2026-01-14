@@ -1,5 +1,6 @@
 import { danhMucService } from "../services/danhmuc.service.js";
 import { createDanhMucSchema } from "../validators/danhmucs/create-danhmuc.validator.js";
+import { updateDanhMucSchema } from "../validators/danhmucs/update-danhmuc.validator.js";
 
 export const danhMucController = {
   layTatCaDanhMuc: async (req, res, next) => {
@@ -32,14 +33,17 @@ export const danhMucController = {
   },
 
   suaDanhMuc: async (req, res, next) => {
-    try {
-      const ma = Number(req.params.ma_danh_muc);
-      await danhMucService.update({ ...req.body, ma_danh_muc: ma });
-      res.json({ message: "Cập nhật danh mục thành công!" });
-    } catch (err) {
-      next(err);
-    }
-  },
+  try {
+    const payload = updateDanhMucSchema.parse(req.body);
+    await danhMucService.update({
+      ma_danh_muc: Number(req.params.ma_danh_muc),
+      ...payload,
+    });
+    res.json({ message: "Cập nhật danh mục thành công!" });
+  } catch (err) {
+    next(err);
+  }
+},
   xoaDanhMuc: async (req, res, next) => {
   try {
     const ma_danh_muc = Number(req.params.ma_danh_muc);
