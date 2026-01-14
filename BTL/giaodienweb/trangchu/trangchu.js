@@ -49,6 +49,7 @@ const COLUMN_LABELS = {
     // ===== TỒN KHO =====
     sl_nhap: "Số lượng nhập",
     sl_ban: "Số lượng bán",
+    so_luong_ban: "Số lượng bán",
     so_luong_ton: "Tồn kho",
     ton_kho: "Tồn kho",
     gia_nhap: "Giá nhập",
@@ -56,10 +57,20 @@ const COLUMN_LABELS = {
 
     loi: "Lợi nhuận",
     thang: "Tháng",
-    loi_nhuan: "Lợi nhuận"
+    loi_nhuan: "Lợi nhuận",
+    doanh_thu: "Doanh thu"
 };
 
-
+const MONEY_FIELDS = [
+  "DonGiaNhap",
+  "DonGiaBan",
+  "ThanhTien",
+  "TongTien",
+  "gia_nhap",
+  "gia_ban",
+  "doanh_thu",
+  "loi_nhuan"
+];
 
 const tableArea = document.getElementById("table-area");
 
@@ -87,7 +98,12 @@ function renderTable(headers, rows) {
         }
 
         headers.forEach(h => {
-            const value = row[h] ?? "";
+              let value = row[h] ?? "";
+
+            // ⭐ FORMAT TIỀN TẠI ĐÂY
+            if (MONEY_FIELDS.includes(h)) {
+              value = formatMoney(value);
+            }
 
             /* ===== CỘT MÃ HÓA ĐƠN ===== */
             if (h === "MaHoaDon" || h === "MaHD") {
@@ -375,9 +391,10 @@ ctpn.forEach(item => {
             ma_sp: item.ma_sp,
             ten_sp: item.ten_sp,
             so_luong_ban: item.so_luong_ban,
-            doanh_thu: formatMoney(item.doanh_thu),
-            gia_nhap: formatMoney(item.gia_nhap),
-            loi_nhuan: formatMoney(loiNhuan)
+            doanh_thu: item.doanh_thu,
+            gia_nhap: item.gia_nhap,
+            loi_nhuan: loiNhuan
+
         };
     });
 
@@ -423,7 +440,7 @@ async function loadLoiTheoThang() {
     for (let i = 1; i <= 12; i++) {
         currentData.push({
             thang: i,
-            loi_nhuan: formatMoney(map[i])
+            loi_nhuan: map[i]
         });
     }
 
@@ -523,10 +540,6 @@ async function loadLoiTheoThang() {
         }
     });
 }
-
-
-
-
 
 document.querySelectorAll(".profit-item").forEach(item => {
     item.addEventListener("click", () => {
@@ -803,4 +816,3 @@ function getLastName(fullName) {
   const parts = fullName.trim().split(/\s+/);
   return parts[parts.length - 1].toLowerCase();
 }
-

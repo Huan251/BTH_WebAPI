@@ -59,3 +59,19 @@ body {
 .auth button:hover {
     background: #43a047;
 }
+
+.auth-extra {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.auth-extra a {
+  font-size: 14px;
+  text-decoration: none;
+  color: #1976d2;
+}
+
+.auth-extra a:hover {
+  text-decoration: underline;
+}

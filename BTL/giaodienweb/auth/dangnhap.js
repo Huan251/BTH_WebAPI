@@ -18,10 +18,22 @@ form.addEventListener("submit", async (e) => {
 
   const result = await res.json();
 
+  // ❌ Sai tài khoản / mật khẩu
   if (!result.success) {
     alert("Sai tài khoản hoặc mật khẩu");
     return;
   }
 
+  // ❌ KHÔNG PHẢI ADMIN
+if (Number(result.data.role) !== 1) {
+    alert("Bạn không có quyền truy cập hệ thống");
+    return;
+  }
+
+  // ✅ ADMIN → cho vào trang chủ
   window.location.href = "../trangchu/trangchu.html";
 });
+
+function quenMatKhau() {
+  alert("Vui lòng liên hệ admin để cấp lại mật khẩu");
+}

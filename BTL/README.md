@@ -108,9 +108,14 @@
 #    "ma_hd": 701,
 #    "ma_sp": 301,
 #    "so_luong": 2,
-#     "don_gia_ban": 250000
+#    "don_gia_ban": 250000
 # }
 
+# Đăng nhập : http://localhost:3000/api/dangnhap
+# {
+#   "email": "huanle251@gmail.com",
+#   "mat_khau": "huan123"
+# }
 
 ## ==================================== PUT ====================================
 # Sửa danh mục : http://localhost:3000/api/danhmuc/:ma_danh_muc
@@ -187,3 +192,18 @@
 # Xóa nhà cung cấp : http://localhost:3000/api/nhacungcap/:ma_ncc
 # Xóa danh mục : http://localhost:3000/api/danhmuc/:ma_danh_muc
 
+## ================================ PHÂN QUYỀN ====================================
+# POST http://localhost:3000/api/taikhoan/dangnhap
+# body : 
+# {
+#  "email": "huanle251@gmail.com",
+#  "mat_khau": "huan123"
+# }
+
+# Xem theo id : http://localhost:3000/api/adminP/:id
+#               http://localhost:3000/api/nhanvienP/:id
+#               http://localhost:3000/api/khachhangP/:id
+
+# Xem tất cả : http://localhost:3000/api/adminP
+#              http://localhost:3000/api/nhanvienP
+#              http://localhost:3000/api/khachhangP

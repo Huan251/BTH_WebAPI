@@ -12,10 +12,16 @@ import { hoaDonController } from "../controllers/hoadon.controller.js";
 import { chiTietHoaDonController } from "../controllers/chitiet_hoadon.controller.js";
 import { layTonKho } from "../controllers/tonkho.controller.js";
 import { LoiNhuan } from "../controllers/loinhuan.controller.js";
+import { dangkyController } from "../controllers/dangky.controller.js";
+import { phanQuyenMiddleware } from "../middlewares/phanquyen.middleware.js";
+import { phanQuyenController } from "../controllers/phanquyen.controller.js";
+import { taiKhoanController } from "../controllers/taikhoan.controller.js";
 const router = Router();
 
-/* =============================== ĐĂNG NHẬP =============================== */
+/* =============================== AUTH =============================== */
 router.post("/dangnhap", dangnhapController.dangNhap);
+router.post("/dangky", dangkyController.dangKy);
+
 
 // =============================== Danh Mục ===============================
 router.get("/danhmuc", danhMucController.layTatCaDanhMuc);
@@ -91,4 +97,52 @@ router.get("/tonkho", layTonKho);
 
 router.get("/loinhuan/sanpham", LoiNhuan.theoSanPham);
 router.get("/loinhuan/thang", LoiNhuan.theoThang);
+
+/* ================= PHÂN QUYỀN TÀI KHOẢN ================= */
+
+router.post(
+    "/taikhoan/dangnhap",
+    taiKhoanController.dangNhap
+);
+/*
+ROLE:
+1 - Admin
+2 - Nhân viên
+3 - Khách hàng
+*/
+
+// admin
+router.get(
+  "/adminP/:id",
+  phanQuyenMiddleware([1]),
+  phanQuyenController.adminById
+);
+
+// nhân viên
+router.get(
+  "/nhanvienP/:id",
+  phanQuyenMiddleware([1, 2]),
+  phanQuyenController.nhanvienById
+);
+
+router.get(
+  "/nhanvienP",
+  phanQuyenMiddleware([1]),
+  phanQuyenController.nhanvienList
+);
+
+// khách hàng
+router.get(
+  "/khachhangP/:id",
+  phanQuyenMiddleware([1, 2, 3]),
+  phanQuyenController.khachhangById
+);
+
+router.get(
+  "/khachhangP",
+  phanQuyenMiddleware([1, 2]),
+  phanQuyenController.khachhangList
+);
+
+
 export default router;

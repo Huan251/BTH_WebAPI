@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng ký</title>
+  <link rel="stylesheet" href="dangky.css">
+</head>
+<body>
+
+<div class="register-box">
+  <h2>Đăng ký tài khoản</h2>
+
+  <form id="register-form">
+    <label>Email</label>
+    <input type="email" id="email">
+
+    <label>Mật khẩu</label>
+    <input type="password" id="password">
+
+    <label>Vai trò</label>
+    <select id="role">
+      <option value="">-- Chọn vai trò --</option>
+      <option value="1">Admin</option>
+      <option value="2">Nhân viên</option>
+      <option value="3">Khách</option>
+    </select>
+
+    <button type="submit">Đăng ký</button>
+  </form>
+
+  <div class="back-login">
+    <a href="dangnhap.html">← Quay về đăng nhập</a>
+  </div>
+</div>
+
+<script src="dangky.js"></script>
+</body>
+</html>

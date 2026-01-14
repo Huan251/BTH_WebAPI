@@ -276,7 +276,6 @@ Insert Into HoaDon (ma_hd, ma_kh, ngay_ban, tong_tien) Values
 
 Insert Into ChiTiet_HoaDon (ma_cthd, ma_hd, ma_sp, so_luong, don_gia_ban) Values
 (832, 702, 311, 2, 1),
-(831, 701, 305, 12, 10000),
 (801, 701, 301, 1, 450000),
 (802, 702, 302, 1, 350000),
 (803, 703, 303, 1, 150000),
@@ -319,9 +318,11 @@ Select * from PhieuNhap;
 Select * from SanPham;
 Select * from DanhMuc;
 Select * from HoaDon;
+Select * from ChiTiet_HoaDon;
 Select * from NhaCungCap;
-Select * from  TaiKhoan;
+Select * from TaiKhoan;
 
+DELIMITER //
 CREATE TRIGGER trg_UpdateTongTien_Insert 
 AFTER INSERT ON ChiTiet_HoaDon 
 FOR EACH ROW 
@@ -333,10 +334,10 @@ BEGIN
         WHERE ma_hd = NEW.ma_hd     
     )     
     WHERE ma_hd = NEW.ma_hd;
-END
+END //
 DELIMITER ;
 
-DELIMITER
+DELIMITER //
 CREATE TRIGGER trg_UpdateTongTien_Update 
 AFTER UPDATE ON ChiTiet_HoaDon 
 FOR EACH ROW 
@@ -360,7 +361,7 @@ BEGIN
 END //
 DELIMITER ;
 
-DELIMITER 
+DELIMITER //
 CREATE TRIGGER trg_UpdateTongTien_Delete
 AFTER DELETE ON ChiTiet_HoaDon
 FOR EACH ROW
@@ -375,7 +376,7 @@ BEGIN
 END //
 DELIMITER ;
 
-DELIMITER 
+DELIMITER //
 CREATE TRIGGER trg_AssignGiaBan
 BEFORE INSERT ON ChiTiet_HoaDon
 FOR EACH ROW
@@ -385,5 +386,5 @@ BEGIN
         FROM SanPham 
         WHERE ma_sp = NEW.ma_sp
     );
-END 
+END //
 DELIMITER ;
